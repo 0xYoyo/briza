@@ -2,9 +2,9 @@
 
 repo_slug: briza
 linear_team: YOY
-test_command:
-lint_command:
-typecheck_command:
+test_command: npm run test
+lint_command: npm run lint
+typecheck_command: npm run typecheck
 
 sensitive_paths:
   - .github/workflows/
@@ -20,8 +20,9 @@ sensitive_paths:
   - wrangler.toml
 
 ui_paths:
-  - (none yet — set when the project grows a UI)
-ui_test_command: (none yet)
+  - src/**
+  - public/**
+ui_test_command: npm run test:ui
 
 slack_channel_id: C0BL7QBNER4
 
