@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/yoyopc/repos/briza/**)",
+      "Edit(/Users/yoyopc/repos/briza/**)",
+      "Read(/Users/yoyopc/repos/briza.build/**)",
+      "Edit(/Users/yoyopc/repos/briza.build/**)",
+      "Bash(*)"
+    ]
+  }
+}
