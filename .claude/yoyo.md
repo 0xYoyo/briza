@@ -23,7 +23,7 @@ ui_paths:
   - (none yet — set when the project grows a UI)
 ui_test_command: (none yet)
 
-slack_channel_id: (optional — the notifications channel ID, enables the
+slack_channel_id: C0BL7QBNER4
 watchdog's Slack verification)
 
 max_fix_rounds: 2
