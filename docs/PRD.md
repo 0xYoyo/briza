@@ -70,8 +70,9 @@ nothing is collected.
 ## 7. Integrations & services
 - **Hosting:** GitHub Pages or Cloudflare Pages (factory's choice) — free
   tier, static hosting, custom-domain support. Fallback: the other one.
-- **Domain:** `briza-tlv.co.il` (availability check pending — see Human
-  checklist), ~₪60–80/year, the project's only recurring cost.
+- **Domain:** the purchased domain (final name chosen at purchase;
+  `briza-tlv.co.il` is the leading candidate — see Human checklist),
+  ~₪60–80/year, the project's only recurring cost.
 - **Google Maps:** free embed iframe; no API key.
 - **WhatsApp:** `wa.me` deep links + group invite link; free, no API.
 
@@ -102,8 +103,9 @@ group live, social profiles created with the site in bio.
    no layout work.
 
 ## 11. Risks & open questions
-- **Domain availability** — `briza-tlv.co.il` may be taken; fallback name
-  decided at purchase time (blocks DNS, not the build).
+- **Domain availability** — the final name is chosen at purchase;
+  `briza-tlv.co.il` is the leading candidate but may be taken (blocks DNS,
+  not the build).
 - **Sole-operator risk** — the growth plan leans on the owner's ~40-minute
   per-stock-drop routine; mitigated by a zero-maintenance site and the week-8
   checkpoint in the marketing plan.
@@ -115,8 +117,8 @@ group live, social profiles created with the site in bio.
   answer only if WhatsApp reservation volume proves demand (~month 4).
 
 ## 12. Human checklist
-- [ ] Buy domain `briza-tlv.co.il` (or fallback) — blocks the DNS/launch
-      step, not the build.
+- [ ] Buy the domain (final name chosen at purchase; `briza-tlv.co.il` is
+      the leading candidate) — blocks the DNS/launch step, not the build.
 - [ ] Create `briza.ganhair@gmail.com` (or similar) — owns GBP, socials, and
       the domain account. Blocks GBP setup.
 - [ ] Convert 052-4381666 to WhatsApp Business (guide provided) — blocks
