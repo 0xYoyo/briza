@@ -27,3 +27,5 @@ slack_channel_id: C0BL7QBNER4
 watchdog's Slack verification)
 
 max_fix_rounds: 2
+
+slack_channel_id: C0BL7QBNER4
