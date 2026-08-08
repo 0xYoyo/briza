@@ -12,7 +12,8 @@ describe("store constants", () => {
       new URL("../src/pages/index.astro", import.meta.url),
       "utf8",
     );
-    expect(page).toContain(STORE_NAME);
+    expect(page).toContain('import { STORE_NAME } from "../constants"');
+    expect(page).toContain("{STORE_NAME}");
     expect(page).toContain('lang="he"');
     expect(page).toContain('dir="rtl"');
   });
