@@ -1,0 +1,126 @@
+---
+import { HOURS, MAPS_URL } from "../constants";
+import { hoursRows } from "../hours";
+import { callHref, joinHref } from "../links";
+import Button from "./Button.astro";
+import Section from "./Section.astro";
+
+const rows = hoursRows(HOURS);
+---
+
+<Section>
+  <h2>גן העיר, קומת כניסה</h2>
+  <p class="visit__address">אבן גבירול <bdi>71</bdi>, קניון גן העיר, תל אביב</p>
+  <div class="visit__hours">
+    <p class="visit__status" data-status hidden></p>
+    <table class="hours">
+      <thead>
+        <tr>
+          <th scope="col">יום</th>
+          <th scope="col">שעות</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map((row) => (
+            <tr>
+              <td>{row.days}</td>
+              <td>
+                <bdi>{row.time}</bdi>
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <div class="visit__actions">
+    <Button kind="secondary" href={MAPS_URL} target="_blank" rel="noopener">נווטו לחנות</Button>
+    <Button kind="secondary" href={callHref()} icon="phone">התקשרו</Button>
+    <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+  </div>
+</Section>
+
+<!--
+  [no-js-state] the page's only script: compute the open/closed line from
+  HOURS in Israel time and reveal the slot. Without JS the slot stays hidden
+  and nothing else changes. [error-none] no fetch, nothing else touched.
+-->
+<script>
+  import { HOURS } from "../constants";
+  import { formatStatusLine, getStatus } from "../hours";
+
+  const slot = document.querySelector<HTMLElement>("[data-status]");
+  if (slot) {
+    slot.textContent = formatStatusLine(getStatus(new Date(), HOURS));
+    slot.removeAttribute("hidden");
+  }
+</script>
+
+<style>
+  .visit__address {
+    margin-block-start: var(--stack-tight);
+    color: var(--text-muted);
+  }
+
+  /*
+   * The address→table gap is constant. The status line is overlaid inside
+   * that gap (absolute, margin 0), so the table sits at the same position
+   * with or without JavaScript ([no-js-state]).
+   */
+  .visit__hours {
+    position: relative;
+    margin-block-start: var(--stack-loose);
+    max-inline-size: var(--measure-wide);
+  }
+
+  .visit__status {
+    position: absolute;
+    inset-block-end: 100%;
+    inset-inline-start: 0;
+    margin: 0;
+    padding-block-end: var(--space-1);
+    line-height: var(--leading-snug);
+    color: var(--text-accent);
+  }
+
+  /* Hours table (DESIGN §2.7): raised surface, --radius-lg, hairline rows */
+  .hours {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface-raised);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  .hours th,
+  .hours td {
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    text-align: start;
+  }
+
+  .hours th {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-bold);
+    line-height: var(--leading-snug);
+    border-block-end: var(--border-2) solid var(--wood-500);
+  }
+
+  .hours tbody tr + tr td {
+    border-block-start: var(--border-1) solid var(--border-hairline);
+  }
+
+  .hours td:last-child {
+    color: var(--text-muted);
+  }
+
+  .visit__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stack-tight);
+    margin-block-start: var(--stack-loose);
+  }
+</style>
