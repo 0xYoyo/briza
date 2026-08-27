@@ -27,6 +27,8 @@ const ogImage = await getImage({
   width: OG_WIDTH,
   height: OG_HEIGHT,
   fit: "cover",
+  // keep the sign in frame: crop from the top of the storefront photo
+  position: "top",
   format: "webp",
 });
 // Reading width/height off the ImageMetadata proxy marks the original .jpg
