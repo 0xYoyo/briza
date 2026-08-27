@@ -1,0 +1,47 @@
+---
+import { GBP_REVIEWS_URL, GBP_WRITE_REVIEW_URL } from "../constants";
+import Section from "./Section.astro";
+---
+
+<Section>
+  <h2>מה אומרות עלינו</h2>
+  <ul class="reviews">
+    <li>
+      <a href={GBP_REVIEWS_URL} target="_blank" rel="noopener">לביקורות בגוגל</a>
+    </li>
+    <li>
+      <a href={GBP_WRITE_REVIEW_URL} target="_blank" rel="noopener">כתבו לנו ביקורת</a>
+    </li>
+  </ul>
+</Section>
+
+<style>
+  /*
+   * [no-testimonial] social proof is two links — no quote, star, rating or
+   * avatar. Links per DESIGN §2.7: --link, underlined, offset 3px, 1.5px.
+   */
+  .reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--stack-tight);
+    margin-block: var(--stack) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* [tap-56] text links still get a 56px hit area */
+  .reviews a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--tap-min);
+    color: var(--link);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    transition: color var(--dur-base) var(--ease-out);
+  }
+  .reviews a:hover {
+    color: var(--link-hover);
+  }
+</style>

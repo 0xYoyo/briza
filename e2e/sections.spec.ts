@@ -11,6 +11,8 @@ const HEADINGS = [
   "איך זה עובד",
   "בריזה",
   "מהמדפים שלנו",
+  "גן העיר, קומת כניסה",
+  "מה אומרות עלינו",
 ];
 
 /** Elements painted WhatsApp green that intersect the viewport right now. */
@@ -94,7 +96,7 @@ test("photos grid shape and image attributes (AC-7) [not-catalog]", async ({
   expect(tracks).toBe(testInfo.project.name === "mobile" ? 2 : 3);
 });
 
-test("primary pills sit ≥1 viewport apart (AC-6) [one-cta]", async ({
+test("consecutive primary pills sit ≥1 viewport apart (AC-6) [one-cta]", async ({
   page,
 }) => {
   const tops = await page
@@ -102,9 +104,15 @@ test("primary pills sit ≥1 viewport apart (AC-6) [one-cta]", async ({
     .evaluateAll((els) =>
       els.map((el) => el.getBoundingClientRect().top + window.scrollY),
     );
-  expect(tops.length).toBe(2);
+  // hero, Offer, Visit — the three and only primary pills on the page
+  expect(tops.length).toBe(3);
   const vh = await page.evaluate(() => window.innerHeight);
-  expect(tops[1] - tops[0]).toBeGreaterThanOrEqual(vh);
+  for (let i = 1; i < tops.length; i++) {
+    expect(
+      tops[i] - tops[i - 1],
+      `pill ${i} vs ${i - 1}`,
+    ).toBeGreaterThanOrEqual(vh);
+  }
 });
 
 test("at most one green pill is visible at any scroll position (AC-6) [one-cta]", async ({

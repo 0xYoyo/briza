@@ -12,12 +12,27 @@ type Props = {
   icon?: "whatsapp" | "phone";
   /** Quiet buttons on navy surfaces switch to ice border/text. */
   inverse?: boolean;
+  /** For external destinations (maps, socials): open in a new tab. */
+  target?: "_blank";
+  rel?: string;
 };
 
-const { href, kind = "primary", icon, inverse = false } = Astro.props;
+const {
+  href,
+  kind = "primary",
+  icon,
+  inverse = false,
+  target,
+  rel,
+} = Astro.props;
 ---
 
-<a class:list={["btn", `btn--${kind}`, { "btn--inverse": inverse }]} href={href}>
+<a
+  class:list={["btn", `btn--${kind}`, { "btn--inverse": inverse }]}
+  href={href}
+  target={target}
+  rel={rel}
+>
   {
     icon === "whatsapp" && (
       <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
