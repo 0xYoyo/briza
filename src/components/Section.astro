@@ -1,0 +1,59 @@
+---
+/**
+ * Page section (DESIGN §2.1): vertical rhythm by padding only — no borders,
+ * dividers or angled edges between sections. Content is a single column at
+ * `--content-max` with the page gutters; headings align start.
+ */
+type Props = {
+  /** Only the Offer sits on the sand surface (DESIGN §2.1). */
+  surface?: "page" | "sand";
+};
+
+const { surface = "page" } = Astro.props;
+---
+
+<section class:list={["section", { "section--sand": surface === "sand" }]}>
+  <div class="section__inner">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--section-y);
+    padding-inline: var(--gutter);
+  }
+
+  .section--sand {
+    background: var(--surface-sand);
+  }
+
+  .section__inner {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    inline-size: 100%;
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    text-align: start;
+  }
+
+  /* Section headings: display face at h2, aligned start (DESIGN §2.3) */
+  .section__inner :global(h2) {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-h2);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
+    color: var(--text-body);
+  }
+
+  @media (min-width: 900px) {
+    .section {
+      padding-block: var(--section-y-lg);
+      padding-inline: var(--gutter-wide);
+    }
+  }
+</style>

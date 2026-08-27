@@ -1,0 +1,53 @@
+---
+import { joinHref } from "../links";
+import Button from "./Button.astro";
+import Section from "./Section.astro";
+---
+
+<Section surface="sand">
+  <div class="offer">
+    <div class="offer__text">
+      <h2><bdi>10%</bdi> הנחה על הקנייה הראשונה</h2>
+      <p class="offer__body">
+        קבוצת הוואטסאפ של בריזה היא קבוצה שקטה — רק אירית כותבת בה, וכל סחורה חדשה מופיעה שם
+        ראשונה. הצטרפו, ובקנייה הראשונה בחנות הראו בקופה שאתן בקבוצה ותקבלו <bdi>10%</bdi> הנחה.
+      </p>
+    </div>
+    <div class="offer__action">
+      <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+    </div>
+  </div>
+</Section>
+
+<style>
+  /*
+   * [one-cta] the two primary pills must sit ≥1 viewport apart, top edge to
+   * top edge, and never share a viewport. The hero pill sits ~150px above the
+   * hero's bottom edge, so the Offer is a full-height poster (100svh plus one
+   * section step) with its pill at the end: the pill lands ≥1 viewport +
+   * its own height below the hero pill on both phones and desktop.
+   * [no-card-grid] typographic only — no box, border or card.
+   */
+  .offer {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-block-size: calc(100svh + var(--space-24));
+  }
+
+  .offer__text {
+    margin-block: auto;
+  }
+
+  .offer__body {
+    max-inline-size: var(--measure-prose);
+    margin-block-start: var(--stack);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body);
+  }
+
+  .offer__action {
+    display: flex;
+    padding-block-start: var(--stack-loose);
+  }
+</style>
