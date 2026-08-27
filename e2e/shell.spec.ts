@@ -16,15 +16,23 @@ test("has exactly one h1, the text wordmark [wordmark-is-text]", async ({
 test("exactly one visible WhatsApp-green element at initial scroll [one-cta]", async ({
   page,
 }) => {
-  const count = await page.evaluate(
-    () =>
-      Array.from(document.querySelectorAll("*")).filter((el) => {
-        const cs = getComputedStyle(el);
-        if (cs.backgroundColor !== "rgb(37, 211, 102)") return false;
-        const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0 && cs.visibility !== "hidden";
-      }).length,
-  );
+  // Visible = painted green and intersecting the viewport at scrollY 0; the
+  // page has a second primary pill further down (Offer), ≥1 viewport away.
+  const count = await page.evaluate(() => {
+    const vh = window.innerHeight;
+    return Array.from(document.querySelectorAll("*")).filter((el) => {
+      const cs = getComputedStyle(el);
+      if (cs.backgroundColor !== "rgb(37, 211, 102)") return false;
+      const r = el.getBoundingClientRect();
+      return (
+        r.width > 0 &&
+        r.height > 0 &&
+        cs.visibility !== "hidden" &&
+        r.bottom > 0 &&
+        r.top < vh
+      );
+    }).length;
+  });
   expect(count).toBe(1);
 });
 

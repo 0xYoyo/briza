@@ -1,0 +1,55 @@
+---
+import { writeHref } from "../links";
+import Button from "./Button.astro";
+import Section from "./Section.astro";
+---
+
+<Section>
+  <h2>איך זה עובד</h2>
+  <ol class="steps">
+    <li>אירית מעלה לקבוצה תמונות של סחורה חדשה, עם מידות ומחיר.</li>
+    <li>ראיתן משהו? כתבו לה ״שמרי לי״ — והיא שומרת לכן אותו בחנות.</li>
+    <li>באות למדוד בנחת, בלי התחייבות.</li>
+  </ol>
+  <div class="steps__action">
+    <Button kind="secondary" href={writeHref()} icon="whatsapp">כתבו לאירית</Button>
+  </div>
+</Section>
+
+<style>
+  /*
+   * Numbered steps (DESIGN §2.7): the numeral is Secular One at h2 size in
+   * the accent blue at the inline-start of its line — no circles, connectors
+   * or icons ([no-card-grid]); lines are separated by --stack.
+   */
+  .steps {
+    display: grid;
+    gap: var(--stack);
+    max-inline-size: var(--measure-wide);
+    margin-block: var(--stack) 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: baseline;
+    counter-increment: step;
+  }
+
+  .steps li::before {
+    content: counter(step);
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-tight);
+    color: var(--text-accent);
+  }
+
+  .steps__action {
+    display: flex;
+    margin-block-start: var(--stack-loose);
+  }
+</style>

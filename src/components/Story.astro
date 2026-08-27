@@ -1,0 +1,28 @@
+---
+import { STORE_NAME } from "../constants";
+import Section from "./Section.astro";
+---
+
+<Section>
+  <h2>{STORE_NAME}</h2>
+  <p class="story__body">
+    את בריזה פתח אבא של אירית, דוריאן, לפני כארבעים שנה. היום אירית מנהלת אותה בעצמה: בוחרת כל
+    פריט ביד, מזמינה בכמויות קטנות, ועונה לכן בעצמה בוואטסאפ. בלי מותגים גדולים ובלי אופנה מהירה —
+    בגדים יפים שנוח ללבוש, במחירים שמתחילים ב־<bdi>₪79</bdi>. אצלנו לא ממהרים.
+  </p>
+</Section>
+
+<style>
+  /*
+   * The Story body is the page's one use of --font-quote (DESIGN §2.3) — a
+   * serif voice for Irit's passage without a quote block ([no-testimonial]).
+   * [rtl-numerals] the price is an isolated LTR run via <bdi>.
+   */
+  .story__body {
+    max-inline-size: var(--measure-prose);
+    margin-block-start: var(--stack);
+    font-family: var(--font-quote);
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-body);
+  }
+</style>
