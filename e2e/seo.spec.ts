@@ -42,20 +42,39 @@ test("head carries title, description, canonical and Open Graph (AC-6)", async (
   await expect(page.locator('html[lang="he"][dir="rtl"]')).toHaveCount(1);
 });
 
-test("og:image is an absolute 1200×630 webp that resolves (AC-6)", async ({
+test("og:image is an absolute 630px-tall webp whose meta matches the file (AC-6)", async ({
   page,
 }) => {
   const og = page.locator('meta[property="og:image"]');
   const url = await og.getAttribute("content");
   expect(url?.startsWith("https://briza-tlv.com/_astro/")).toBe(true);
   expect(url?.endsWith(".webp")).toBe(true);
-  await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
-    "content",
-    "1200",
+  // The source storefront photo is 1028px wide and astro:assets never upscales,
+  // so the crop is 1028×630 (target 1200×630); the meta must match the real file.
+  const width = Number(
+    await page
+      .locator('meta[property="og:image:width"]')
+      .getAttribute("content"),
   );
-  await expect(
-    page.locator('meta[property="og:image:height"]'),
-  ).toHaveAttribute("content", "630");
+  const height = Number(
+    await page
+      .locator('meta[property="og:image:height"]')
+      .getAttribute("content"),
+  );
+  expect(height).toBe(630);
+  expect(width).toBeGreaterThanOrEqual(1000);
+  const natural = await page.evaluate(
+    (src) =>
+      new Promise<{ w: number; h: number }>((resolve, reject) => {
+        const img = new Image();
+        img.onload = () =>
+          resolve({ w: img.naturalWidth, h: img.naturalHeight });
+        img.onerror = () => reject(new Error(`cannot load ${src}`));
+        img.src = src;
+      }),
+    new URL(url ?? "").pathname,
+  );
+  expect(natural).toEqual({ w: width, h: height });
   const alt = await page
     .locator('meta[property="og:image:alt"]')
     .getAttribute("content");
