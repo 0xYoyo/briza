@@ -25,6 +25,8 @@ import Button from "./Button.astro";
    */
   .sticky-bar {
     position: fixed;
+    /* the height global.css reserves under the page (--sticky-bar-height) */
+    min-block-size: calc(var(--sticky-bar-height) + env(safe-area-inset-bottom, 0px));
     inset-block-end: 0;
     inset-inline: 0;
     z-index: 10;

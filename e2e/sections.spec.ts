@@ -117,8 +117,7 @@ test("consecutive primary pills sit ≥1 viewport apart (AC-6) [one-cta]", async
 
 test("at most one green pill is visible at any scroll position (AC-6) [one-cta]", async ({
   page,
-}, testInfo) => {
-  test.skip(testInfo.project.name !== "mobile", "mobile sweep");
+}) => {
   const { vh, total } = await page.evaluate(() => ({
     vh: window.innerHeight,
     total: document.documentElement.scrollHeight,

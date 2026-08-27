@@ -175,8 +175,13 @@ body {
   text-align: start;
 }
 
-/* Reserve the sticky bar's height so it never covers content (<900px) */
-@media (max-width: 899px) {
+/*
+ * Reserve the sticky bar's height so it never covers content. The range
+ * syntax shares one exact boundary with StickyBar.astro's `min-width: 900px`
+ * — an integer upper bound one pixel lower left fractional widths in
+ * (899, 900) with a visible bar and no reserved space.
+ */
+@media (width < 900px) {
   body {
     padding-block-end: calc(
       var(--sticky-bar-height) +
