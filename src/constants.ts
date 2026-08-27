@@ -1,9 +1,27 @@
 export const STORE_NAME = "בריזה";
 
+/** Canonical production origin (PRD §7). No trailing slash. */
+export const SITE_URL = "https://briza-tlv.com";
+
 /** Owner's WhatsApp / mobile number in E.164 digits (for `wa.me` and `tel:` links). */
 export const WHATSAPP_NUMBER = "972524381666";
 /** Same number, as displayed on the page. */
 export const PHONE_DISPLAY = "052-4381666";
+/** Store landline in E.164 digits — JSON-LD only, never rendered (PRD §3.4). */
+export const LANDLINE_NUMBER = "97235279187";
+
+/** Gan Ha'Ir mall, Ibn Gabirol 71 — building-level accuracy, chosen 2026-08-27. */
+export const GEO = { latitude: 32.0866, longitude: 34.7815 } as const;
+
+/** Postal address (PRD §3.4); the page renders `street, locality`. */
+export const ADDRESS = {
+  street: "אבן גבירול 71, קניון גן העיר",
+  locality: "תל אביב",
+  country: "IL",
+} as const;
+
+export const META_DESCRIPTION =
+  "בריזה — חנות בגדי נשים בקניון גן העיר, תל אביב. בגדים מיובאים, נבחרים ביד, במידות 38–54, ממחיר ₪79. הצטרפו לקבוצת העדכונים בוואטסאפ ל־10% הנחה על הקנייה הראשונה.";
 
 /**
  * WhatsApp group invite link. Empty until the group exists — while empty the

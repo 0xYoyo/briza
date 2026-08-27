@@ -2,6 +2,7 @@
 import { HOURS, MAPS_URL } from "../constants";
 import { hoursRows } from "../hours";
 import { callHref, joinHref } from "../links";
+import Address from "./Address.astro";
 import Button from "./Button.astro";
 import Section from "./Section.astro";
 
@@ -10,7 +11,7 @@ const rows = hoursRows(HOURS);
 
 <Section>
   <h2>גן העיר, קומת כניסה</h2>
-  <p class="visit__address">אבן גבירול <bdi>71</bdi>, קניון גן העיר, תל אביב</p>
+  <p class="visit__address"><Address /></p>
   <div class="visit__hours">
     <p class="visit__status" data-status hidden></p>
     <table class="hours">
