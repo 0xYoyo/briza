@@ -1,0 +1,17 @@
+:root{
+/* Soft, not playful: garment-label roundness. Pills only for actions. */
+--radius-sm:6px;--radius-md:12px;--radius-lg:20px;--radius-xl:28px;--radius-pill:999px;
+
+--border-1:1px;--border-2:2px;
+
+/* Shadows are quiet and warm — never blue-grey */
+--shadow-card:0 1px 2px rgba(26,26,26,.05),0 8px 24px rgba(90,70,45,.08);
+--shadow-card-hover:0 2px 4px rgba(26,26,26,.06),0 14px 34px rgba(90,70,45,.13);
+--shadow-float:0 -2px 14px rgba(11,16,32,.14);
+--shadow-inset-hairline:inset 0 0 0 1px var(--border-hairline);
+
+/* Protection scrim for text over photography */
+--scrim-bottom:linear-gradient(to top,rgba(11,16,32,.92) 0%,rgba(11,16,32,.72) 38%,rgba(11,16,32,0) 100%); /* @kind color */
+--scrim-flat:rgba(11,16,32,.55);
+--blur-glass:saturate(120%) blur(10px); /* @kind other */
+}

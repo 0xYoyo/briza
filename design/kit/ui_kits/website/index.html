@@ -1,0 +1,54 @@
+<!-- @dsCard group="Website" viewport="430x860" name="Briza — one-page site (mobile)" subtitle="Hero, story, offering, gallery, visit, sticky WhatsApp bar" -->
+<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בריזה · בגדי נשים בגן העיר, תל אביב</title>
+<link rel="stylesheet" href="../../styles.css">
+<script>window.BRIZA_ICON_BASE="../../assets/icons"</script>
+<style>
+body{padding-bottom:110px}
+.wrap{max-width:var(--content-max);margin:0 auto;padding:0 var(--gutter)}
+.section{padding:var(--section-y) 0}
+.section.raised{background:var(--surface-raised)}
+.section.inverse{background:var(--surface-inverse);color:var(--text-on-inverse)}
+.heroline{display:flex;align-items:center;gap:10px;white-space:nowrap;font-size:var(--text-label);font-weight:var(--weight-semibold);letter-spacing:var(--track-label);color:var(--ice-300)}
+.heroline .rule{width:26px;height:2px;background:var(--ice-400);flex:0 0 auto}
+.herotype{min-height:92svh;background:var(--surface-inverse);display:flex;flex-direction:column;justify-content:flex-end}
+.herotypeinner{width:100%;display:flex;flex-direction:column;gap:var(--space-5);align-items:flex-start;padding-block:var(--space-16) var(--space-10);flex:1;justify-content:center}
+.herotag{font-size:var(--text-lead);line-height:var(--leading-snug);color:var(--text-on-inverse);max-width:24ch;margin:0}
+.heroband{width:100%;height:26svh;object-fit:cover;object-position:center 30%;border-top:1px solid var(--border-on-inverse)}
+.story{display:flex;flex-direction:column;gap:var(--stack)}
+.prose{display:flex;flex-direction:column;gap:var(--space-4);font-size:var(--text-body-lg);color:var(--text-muted);max-width:var(--measure-wide)}
+.pull{margin:var(--space-4) 0 0;padding:var(--space-5) 0 0;border-top:2px solid var(--ice-300);display:flex;flex-direction:column;gap:var(--space-3);max-width:var(--measure-wide)}
+.pull p{font-family:var(--font-quote);font-size:26px;line-height:1.45;margin:0}
+.pull footer{font-size:var(--text-label);font-weight:var(--weight-semibold);color:var(--text-subtle)}
+.cards{display:grid;grid-template-columns:1fr;gap:var(--space-4);margin-top:var(--space-8)}
+.cardin{display:flex;flex-direction:column;gap:var(--space-3);align-items:flex-start}
+.cardin p{color:var(--text-muted)}
+.iconpad{display:grid;place-items:center;width:52px;height:52px;border-radius:var(--radius-pill);background:var(--ice-200)}
+.gallery li:last-child:nth-child(odd){grid-column:1/-1}
+.gallery li:last-child:nth-child(odd) img{aspect-ratio:16/10}
+.visit{display:grid;grid-template-columns:1fr;gap:var(--space-4);margin-top:var(--space-8)}
+.visitactions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-5)}
+.cardtitle{margin-bottom:var(--space-2)}
+.hairline{height:1px;background:var(--border-hairline)}
+.map{margin-top:var(--space-5);border:1px solid var(--border-hairline);border-radius:var(--radius-lg);overflow:hidden;background:var(--surface-raised)}
+.map iframe{display:block;width:100%;height:300px;border:0}
+.footer{padding-bottom:var(--space-16)}
+.footerinner{display:flex;flex-direction:column;gap:var(--space-5);align-items:flex-start}
+.footermeta{color:var(--text-on-inverse-muted)}
+.footerfine{color:var(--text-on-inverse-muted);font-size:var(--text-label)}
+.lightbox{position:fixed;inset:0;z-index:60;background:rgba(11,16,32,.94);display:grid;place-items:center;padding:var(--gutter)}
+.lightbox img{max-width:100%;max-height:86svh;border-radius:var(--radius-md)}
+.lbclose{position:absolute;top:16px;inset-inline-end:16px;width:var(--tap-min);height:var(--tap-min);border-radius:var(--radius-pill);background:rgba(240,247,252,.12);border:1px solid var(--border-on-inverse);display:grid;place-items:center;cursor:pointer}
+@media (min-width:900px){.wrap{padding:0 var(--gutter-wide)}.section{padding:var(--section-y-lg) 0}.cards{grid-template-columns:repeat(3,1fr)}.visit{grid-template-columns:1.3fr 1fr}.heroband{height:32svh}}
+</style></head>
+<body><div id="root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script type="text/babel" src="Site.jsx"></script>
+<script type="text/babel">
+const hero = new URLSearchParams(location.search).get('hero') === 'type' ? 'type' : 'photo';
+ReactDOM.createRoot(document.getElementById('root')).render(<Site hero={hero} />);
+</script>
+</body></html>

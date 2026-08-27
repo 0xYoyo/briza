@@ -1,0 +1,27 @@
+:root{
+--font-display:"Secular One","Arial Hebrew",system-ui,sans-serif;
+--font-body:"Assistant","Arial Hebrew",system-ui,sans-serif;
+--font-quote:"Frank Ruhl Libre","Times New Roman",serif;
+
+/* Scale — mobile-first, tuned for readers 50+. Nothing below 18px. */
+--text-hero:clamp(40px,11vw,72px);
+--text-h1:clamp(32px,7.5vw,48px);
+--text-h2:clamp(26px,6vw,34px);
+--text-h3:22px;
+--text-lead:clamp(20px,4.8vw,24px);
+--text-body-size:19px;
+--text-body-lg:21px;
+--text-label:18px;
+--text-meta:18px;
+
+--leading-tight:1.1;
+--leading-snug:1.28;
+--leading-body:1.62;
+--leading-loose:1.8;
+
+--weight-regular:400;--weight-semibold:600;--weight-bold:700;
+--track-display:0.005em;--track-sign:0.02em;--track-label:0.04em;
+
+--measure-prose:34ch;
+--measure-wide:52ch;
+}

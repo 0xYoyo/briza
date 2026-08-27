@@ -1,0 +1,54 @@
+:root{
+/* ——— Base palette: sampled from the storefront photographs ——— */
+/* Sign panel: the black fascia the glowing בריזה sits on */
+--navy-900:#0B1020;--navy-800:#131B31;--navy-700:#1E2942;--navy-600:#2C3A58;
+/* Sign glow: cool ice-blue halo around the letters */
+--ice-100:#F0F7FC;--ice-200:#D5E9F6;--ice-300:#AFD5EC;--ice-400:#7FB8DC;--ice-500:#4E93C2;
+/* Garment blues: the cobalt trousers and blue-print tops */
+--blue-600:#2A5EA8;--blue-700:#1E4685;
+/* Interior light: warm cream walls and lit ceiling */
+--cream-50:#FDFAF5;--cream-100:#F7F1E6;--cream-200:#EFE5D3;--sand-300:#E0CDAE;
+/* Wood shelving and hanging rails */
+--wood-500:#C79A63;--wood-600:#A87C48;
+/* Accents seen in stock: red trousers, sale tags, lemon linen */
+--coral-600:#C1483C;--lemon-300:#EFE09A;
+/* Neutrals for text on light surfaces */
+--stone-900:#1A1A1A;--stone-700:#4A4A4A;--stone-500:#7A7570;--stone-300:#CFC9C0;
+--white:#FFFFFF;
+/* WhatsApp brand green — fixed by the platform, used only for its button */
+--whatsapp-500:#25D366;--whatsapp-600:#1EA956;--whatsapp-700:#14803F;
+
+/* ——— Semantic aliases ——— */
+--surface-page:var(--cream-50);
+--surface-card:var(--white);
+--surface-raised:var(--cream-100);
+--surface-inverse:var(--navy-900);
+--surface-inverse-2:var(--navy-800);
+--surface-sand:var(--cream-200);
+
+--text-body:var(--stone-900);
+--text-muted:var(--stone-700);
+--text-subtle:var(--stone-500);
+--text-on-inverse:var(--ice-100);
+--text-on-inverse-muted:var(--ice-300);
+--text-accent:var(--blue-700);
+
+--border-hairline:var(--stone-300);
+--border-strong:var(--navy-900);
+--border-on-inverse:rgba(213,233,246,.28);
+
+--action-primary:var(--whatsapp-500);
+--action-primary-hover:var(--whatsapp-600);
+--action-primary-press:var(--whatsapp-700);
+--action-primary-text:var(--white);
+--action-secondary:var(--navy-900);
+--action-secondary-hover:var(--navy-700);
+--action-secondary-text:var(--ice-100);
+--action-quiet-border:var(--navy-900);
+--action-quiet-text:var(--navy-900);
+
+--focus-ring:var(--ice-500);
+--glow-sign:0 0 18px rgba(175,213,236,.75),0 0 44px rgba(126,184,220,.45);
+--link:var(--blue-700);
+--link-hover:var(--navy-900);
+}
