@@ -121,10 +121,16 @@ import Button from "./Button.astro";
       block-size: 80vh;
       max-block-size: 80vh;
     }
+    /*
+     * [wordmark-once] at ≥900px the frame shows ~50% of the 1028×1024 source
+     * (e.g. 640 of 1275px at 1280×800); anchoring at 45% starts the crop
+     * below the sign band (top ~18%) so the lit interior and mannequins are
+     * the subject and only the text wordmark carries the name.
+     */
     .hero__photo {
       inset: 0;
       block-size: 100%;
-      object-position: 50% 0%;
+      object-position: 50% 45%;
     }
     .hero__content {
       padding-inline: var(--gutter-wide);

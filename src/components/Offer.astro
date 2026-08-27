@@ -21,22 +21,21 @@ import Section from "./Section.astro";
 
 <style>
   /*
-   * [one-cta] the two primary pills must sit ≥1 viewport apart, top edge to
-   * top edge, and never share a viewport. The hero pill sits ~150px above the
-   * hero's bottom edge, so the Offer is a full-height poster (100svh plus one
-   * section step) with its pill at the end: the pill lands ≥1 viewport +
-   * its own height below the hero pill on both phones and desktop.
-   * [no-card-grid] typographic only — no box, border or card.
+   * [one-cta] the Offer pill must never share a viewport with the hero pill,
+   * which means its top edge sits ≥ 1 viewport below the hero pill's bottom
+   * edge. The hero pill's bottom is 83px above the hero's bottom edge
+   * (--space-10 padding + the sub-line + --stack-tight), so with the pill at
+   * the end of this block the minimum block size is 100svh − 83px + 64px
+   * (pill) − section padding; 100svh − --space-16 covers both breakpoints.
+   * Heading and paragraph sit at the section's normal top rhythm; the
+   * remaining height is the one gap [one-cta] forces, between paragraph and
+   * pill. [no-card-grid] typographic only — no box, border or card.
    */
   .offer {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    min-block-size: calc(100svh + var(--space-24));
-  }
-
-  .offer__text {
-    margin-block: auto;
+    min-block-size: calc(100svh - var(--space-16));
   }
 
   .offer__body {
@@ -48,6 +47,7 @@ import Section from "./Section.astro";
 
   .offer__action {
     display: flex;
+    margin-block-start: auto;
     padding-block-start: var(--stack-loose);
   }
 </style>
