@@ -1,0 +1,210 @@
+/*
+ * Briza design tokens — docs/DESIGN.md §2.2–§2.6 is the source of truth;
+ * design/kit/tokens/ is the upstream sample and loses on conflict.
+ * [not-dark-mode] one fixed theme: no prefers-color-scheme rule anywhere.
+ * [logical-props] layout uses logical properties only.
+ */
+:root {
+  /* Base palette (sampled from the storefront photographs) */
+  --navy-900: #0b1020;
+  --navy-800: #131b31;
+  --navy-700: #1e2942;
+  --navy-600: #2c3a58;
+  --ice-100: #f0f7fc;
+  --ice-200: #d5e9f6;
+  --ice-300: #afd5ec;
+  --ice-400: #7fb8dc;
+  --ice-500: #4e93c2;
+  --blue-600: #2a5ea8;
+  --blue-700: #1e4685;
+  --cream-50: #fdfaf5;
+  --cream-100: #f7f1e6;
+  --cream-200: #efe5d3;
+  --sand-300: #e0cdae;
+  --wood-500: #c79a63;
+  --wood-600: #a87c48;
+  --coral-600: #c1483c;
+  --lemon-300: #efe09a;
+  --stone-900: #1a1a1a;
+  --stone-700: #4a4a4a;
+  --stone-500: #7a7570;
+  --stone-300: #cfc9c0;
+  --white: #ffffff;
+  /* [green-is-join] WhatsApp green is used by the join button only */
+  --whatsapp-500: #25d366;
+  --whatsapp-600: #1ea956;
+  --whatsapp-700: #14803f;
+
+  /* Color roles (DESIGN §2.2) */
+  --surface-page: var(--cream-50);
+  --surface-sand: var(--cream-200);
+  --surface-raised: var(--cream-100);
+  --surface-inverse: var(--navy-900);
+  --surface-inverse-2: var(--navy-800);
+  --text-body: var(--stone-900);
+  --text-muted: var(--stone-700);
+  --text-accent: var(--blue-700);
+  --text-on-inverse: var(--ice-100);
+  --text-on-inverse-muted: var(--ice-300);
+  --action-primary: var(--whatsapp-500);
+  --action-primary-hover: var(--whatsapp-600);
+  /* [contrast-aa] navy on green (9.4:1); white on green is forbidden */
+  --action-primary-text: var(--navy-900);
+  --action-secondary: var(--navy-900);
+  --action-secondary-hover: var(--navy-700);
+  --action-secondary-text: var(--ice-100);
+  --action-quiet-border: var(--navy-900);
+  --action-quiet-text: var(--navy-900);
+  --focus-ring: var(--ice-500);
+  --border-hairline: var(--stone-300);
+  --border-strong: var(--navy-900);
+  --border-on-inverse: rgba(213, 233, 246, 0.28);
+  --link: var(--blue-700);
+  --link-hover: var(--navy-900);
+  --glow-sign:
+    0 0 18px rgba(175, 213, 236, 0.75), 0 0 44px rgba(126, 184, 220, 0.45);
+
+  /* Typography (DESIGN §2.3) — [no-layout-shift] metric-compatible fallbacks */
+  --font-display: "Secular One", "Arial Hebrew", system-ui;
+  --font-body: "Assistant", "Arial Hebrew", system-ui;
+  --font-quote: "Frank Ruhl Libre", "Arial Hebrew", system-ui;
+  --text-hero: clamp(40px, 11vw, 72px);
+  --text-h1: clamp(32px, 7.5vw, 48px);
+  --text-h2: clamp(26px, 6vw, 34px);
+  --text-h3: 22px;
+  --text-lead: clamp(20px, 4.8vw, 24px);
+  --text-body-lg: 21px;
+  /* [body-19] nothing renders below 19px */
+  --text-body-size: 19px;
+  --text-label: 19px;
+  --leading-tight: 1.1;
+  --leading-snug: 1.28;
+  --leading-body: 1.62;
+  --leading-loose: 1.8;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --track-display: 0.005em;
+  --track-sign: 0.02em;
+  --track-label: 0.04em;
+  --measure-prose: 34ch;
+  --measure-wide: 52ch;
+
+  /* Spacing (DESIGN §2.4) — 4px base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --gutter: 20px;
+  --gutter-wide: 40px;
+  --section-y: 64px;
+  --section-y-lg: 96px;
+  --stack-tight: var(--space-3);
+  --stack: var(--space-5);
+  --stack-loose: var(--space-8);
+  --content-max: 1100px;
+  /* [tap-56] */
+  --tap-min: 56px;
+  --tap-lg: 64px;
+
+  /* Shape and elevation (DESIGN §2.5) */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --border-1: 1px;
+  --border-2: 2px;
+  --shadow-float: 0 -2px 14px rgba(11, 16, 32, 0.14);
+  --scrim-bottom: linear-gradient(
+    to top,
+    rgba(11, 16, 32, 0.92) 0%,
+    rgba(11, 16, 32, 0.72) 38%,
+    rgba(11, 16, 32, 0) 100%
+  );
+  --scrim-flat: rgba(11, 16, 32, 0.55);
+  --blur-glass: saturate(120%) blur(10px);
+
+  /* Motion budget (DESIGN §2.6) — CSS transitions only */
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 420ms;
+  --press-scale: 0.985;
+
+  /* Sticky bar footprint reserved below it on phones ([sticky-secondary]) */
+  --sticky-bar-height: 80px;
+}
+
+/* [reduced-motion] every duration is 0 and nothing scales */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+    --press-scale: 1;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-page);
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--text-body-size);
+  line-height: var(--leading-body);
+  text-align: start;
+}
+
+/* Reserve the sticky bar's height so it never covers content (<900px) */
+@media (max-width: 899px) {
+  body {
+    padding-block-end: calc(
+      var(--sticky-bar-height) +
+      env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-inline-size: 100%;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+/* [focus-visible] every focusable element shows the ring; never hidden */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}

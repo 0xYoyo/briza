@@ -1,0 +1,74 @@
+---
+import { callHref, writeHref } from "../links";
+import Button from "./Button.astro";
+---
+
+<div class="sticky-bar">
+  <div class="sticky-bar__write">
+    <Button kind="secondary" href={writeHref()} icon="whatsapp">כתבו לאירית</Button>
+  </div>
+  <a class="sticky-bar__call" href={callHref()} aria-label="התקשרו לאירית">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z"
+      />
+    </svg>
+  </a>
+</div>
+
+<style>
+  /*
+   * [sticky-secondary] one secondary pill + the call icon, ≤80px, hidden ≥900px.
+   * [no-overlay] this is the only fixed element on the page.
+   * The hairline top edge is an inset shadow so it adds no height.
+   */
+  .sticky-bar {
+    position: fixed;
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    padding-block-end: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--surface-page) 85%, transparent);
+    -webkit-backdrop-filter: var(--blur-glass);
+    backdrop-filter: var(--blur-glass);
+    box-shadow:
+      inset 0 1px 0 0 var(--border-hairline),
+      var(--shadow-float);
+  }
+
+  .sticky-bar__write {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  /* [tap-56] icon-only control: 56×56 hit area, 28px glyph */
+  .sticky-bar__call {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--tap-min);
+    block-size: var(--tap-min);
+    border-radius: var(--radius-pill);
+    color: var(--text-accent);
+    transition: color var(--dur-base) var(--ease-out);
+  }
+  .sticky-bar__call:hover {
+    color: var(--navy-900);
+  }
+  .sticky-bar__call svg {
+    inline-size: 28px;
+    block-size: 28px;
+  }
+
+  @media (min-width: 900px) {
+    .sticky-bar {
+      display: none;
+    }
+  }
+</style>

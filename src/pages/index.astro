@@ -1,14 +1,13 @@
 ---
-import { STORE_NAME } from "../constants";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import StickyBar from "../components/StickyBar.astro";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<html lang="he" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{STORE_NAME}</title>
-  </head>
-  <body>
-    {STORE_NAME}
-  </body>
-</html>
+<Layout>
+  <Hero />
+  <main></main>
+  <Footer />
+  <StickyBar />
+</Layout>

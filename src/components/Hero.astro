@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import { STORE_NAME } from "../constants";
+import { joinHref } from "../links";
+import { HERO_PHOTO } from "../photos";
+import Button from "./Button.astro";
+---
+
+<section class="hero">
+  <Image
+    class="hero__photo"
+    src={HERO_PHOTO.src}
+    alt={HERO_PHOTO.alt}
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <div class="hero__content">
+    <p class="hero__eyebrow">גן העיר, תל אביב</p>
+    <h1 class="hero__wordmark">{STORE_NAME}</h1>
+    <p class="hero__line">
+      בגדי נשים מיובאים, נבחרים ביד, במידות <bdi>38–54</bdi>. ואירית שעונה לכן באהבה.
+    </p>
+    <div class="hero__action">
+      <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+    </div>
+    <p class="hero__sub"><bdi>10%</bdi> הנחה על הקנייה הראשונה לחברות הקבוצה</p>
+  </div>
+</section>
+
+<style>
+  /* [loading-state] navy ground so the scrim and wordmark read before the photo arrives */
+  .hero {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-block-size: 88svh;
+    overflow: hidden;
+    background: var(--surface-inverse);
+    color: var(--text-on-inverse);
+  }
+
+  /*
+   * [wordmark-once] below 900px the photo is oversized and bottom-anchored so
+   * the photographed sign (top ~18% of the frame) is cropped out; the text
+   * wordmark is the only store name on screen.
+   */
+  .hero__photo {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    inline-size: 100%;
+    block-size: 130%;
+    object-fit: cover;
+    object-position: 50% 100%;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--scrim-bottom);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inline-size: 100%;
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+    padding-block: var(--section-y) var(--space-10);
+    padding-inline: var(--gutter);
+    text-align: center;
+  }
+
+  .hero__eyebrow {
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-label);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--track-label);
+    color: var(--text-on-inverse-muted);
+  }
+
+  /* [wordmark-is-text] live text in the display face; glow on the wordmark only */
+  .hero__wordmark {
+    margin-block-start: var(--stack-tight);
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-hero);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-sign);
+    color: var(--text-on-inverse);
+    text-shadow: var(--glow-sign);
+  }
+
+  .hero__line {
+    max-inline-size: var(--measure-wide);
+    margin-block-start: var(--stack);
+    font-size: var(--text-lead);
+    line-height: var(--leading-snug);
+  }
+
+  .hero__action {
+    inline-size: 100%;
+    display: flex;
+    justify-content: center;
+    margin-block-start: var(--stack-loose);
+  }
+
+  .hero__sub {
+    margin-block-start: var(--stack-tight);
+    color: var(--text-on-inverse-muted);
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      min-block-size: 0;
+      block-size: 80vh;
+      max-block-size: 80vh;
+    }
+    .hero__photo {
+      inset: 0;
+      block-size: 100%;
+      object-position: 50% 0%;
+    }
+    .hero__content {
+      padding-inline: var(--gutter-wide);
+    }
+  }
+</style>
