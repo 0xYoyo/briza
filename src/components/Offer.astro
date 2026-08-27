@@ -26,7 +26,11 @@ import Section from "./Section.astro";
    * edge. The hero pill's bottom is 83px above the hero's bottom edge
    * (--space-10 padding + the sub-line + --stack-tight), so with the pill at
    * the end of this block the minimum block size is 100svh − 83px + 64px
-   * (pill) − section padding; 100svh − --space-16 covers both breakpoints.
+   * (pill) − section padding; 100lvh − --space-16 covers both breakpoints.
+   * The LARGE viewport (lvh) is the one that matters: once a phone's URL bar
+   * collapses the visible viewport grows by ~56px, and a block sized from
+   * svh would let the bottom of the hero pill and the top of this pill share
+   * a screen. Plain 100vh is the large viewport on browsers without lvh.
    * Heading and paragraph sit at the section's normal top rhythm; the
    * remaining height is the one gap [one-cta] forces, between paragraph and
    * pill. [no-card-grid] typographic only — no box, border or card.
@@ -35,7 +39,8 @@ import Section from "./Section.astro";
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    min-block-size: calc(100svh - var(--space-16));
+    min-block-size: calc(100vh - var(--space-16));
+    min-block-size: calc(100lvh - var(--space-16));
   }
 
   .offer__body {
