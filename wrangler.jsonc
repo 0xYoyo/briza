@@ -1,0 +1,7 @@
+// Cloudflare Workers static-assets deploy (no `main` — the site is and stays static).
+// Build command: `npm run build` · Deploy command: `npx wrangler deploy`
+{
+  "name": "briza",
+  "compatibility_date": "2026-08-27",
+  "assets": { "directory": "./dist" }
+}
