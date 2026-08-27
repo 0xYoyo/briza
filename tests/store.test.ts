@@ -7,14 +7,14 @@ describe("store constants", () => {
     expect(STORE_NAME).toBe("בריזה");
   });
 
-  it("is displayed by the placeholder page in Hebrew RTL", () => {
-    const page = readFileSync(
-      new URL("../src/pages/index.astro", import.meta.url),
+  it("is the document title of the Hebrew RTL layout", () => {
+    const layout = readFileSync(
+      new URL("../src/layouts/Layout.astro", import.meta.url),
       "utf8",
     );
-    expect(page).toContain('import { STORE_NAME } from "../constants"');
-    expect(page).toContain("{STORE_NAME}");
-    expect(page).toContain('lang="he"');
-    expect(page).toContain('dir="rtl"');
+    expect(layout).toContain('import { STORE_NAME } from "../constants"');
+    expect(layout).toContain("<title>{STORE_NAME}</title>");
+    expect(layout).toContain('lang="he"');
+    expect(layout).toContain('dir="rtl"');
   });
 });
