@@ -7,13 +7,15 @@ describe("store constants", () => {
     expect(STORE_NAME).toBe("בריזה");
   });
 
-  it("is the document title of the Hebrew RTL layout", () => {
+  it("names the site in the Hebrew RTL layout head", () => {
     const layout = readFileSync(
       new URL("../src/layouts/Layout.astro", import.meta.url),
       "utf8",
     );
-    expect(layout).toContain('import { STORE_NAME } from "../constants"');
-    expect(layout).toContain("<title>{STORE_NAME}</title>");
+    expect(layout).toContain("<title>{PAGE_TITLE}</title>");
+    expect(layout).toContain(
+      '<meta property="og:site_name" content={STORE_NAME} />',
+    );
     expect(layout).toContain('lang="he"');
     expect(layout).toContain('dir="rtl"');
   });

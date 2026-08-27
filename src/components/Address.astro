@@ -1,0 +1,11 @@
+---
+/**
+ * The store address as one line from `ADDRESS` (PRD §3.4). Digit runs are
+ * wrapped in <bdi> so the house number never reverses ([rtl-numerals]).
+ */
+import { ADDRESS_LINE } from "../seo";
+
+const parts = ADDRESS_LINE.split(/(\d+)/);
+---
+
+{parts.map((part) => (/^\d+$/.test(part) ? <bdi>{part}</bdi> : part))}

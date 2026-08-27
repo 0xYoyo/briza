@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("page is Hebrew RTL with the store name as title", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('html[lang="he"][dir="rtl"]')).toHaveCount(1);
-  await expect(page).toHaveTitle("בריזה");
+  await expect(page).toHaveTitle("בריזה — בגדי נשים, גן העיר תל אביב");
 });
 
 // AC-3: fonts and every other asset are self-hosted — no third-party requests.

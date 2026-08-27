@@ -39,8 +39,11 @@ test.describe("Visit", () => {
     const status = page.locator("[data-status]");
     await expect(status).toBeVisible();
     await expect(status).toHaveText(STATUS);
-    // the page's only script (Astro inlines it as a module)
-    await expect(page.locator("script")).toHaveCount(1);
+    // the page's only executing script (Astro inlines it as a module);
+    // the JSON-LD block is data, not code
+    await expect(
+      page.locator('script:not([type="application/ld+json"])'),
+    ).toHaveCount(1);
     await expect(page.locator('script[type="module"]')).toHaveCount(1);
   });
 

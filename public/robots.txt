@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://briza-tlv.com/sitemap-index.xml

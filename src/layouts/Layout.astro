@@ -11,7 +11,36 @@ import "@fontsource/assistant/latin-700.css";
 import "@fontsource/frank-ruhl-libre/hebrew-400.css";
 import "@fontsource/frank-ruhl-libre/latin-400.css";
 import "../styles/global.css";
-import { STORE_NAME } from "../constants";
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { META_DESCRIPTION, SITE_URL, STORE_NAME } from "../constants";
+import { HERO_PHOTO } from "../photos";
+import { clothingStoreJsonLd, jsonLdString, PAGE_TITLE } from "../seo";
+
+// Social image cropped from the storefront photo (PRD §3.6), target 1200×630.
+// astro:assets never enlarges, so the real output is clamped to the source
+// (1028px wide today); the meta must report the file's true dimensions.
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
+const ogImage = await getImage({
+  src: HERO_PHOTO.src,
+  width: OG_WIDTH,
+  height: OG_HEIGHT,
+  fit: "cover",
+  // keep the sign in frame: crop from the top of the storefront photo
+  position: "top",
+  format: "webp",
+});
+// Reading width/height off the ImageMetadata proxy marks the original .jpg
+// as referenced and ships it; `clone` is the proxy's non-marking copy.
+const heroMeta =
+  (HERO_PHOTO.src as ImageMetadata & { clone?: ImageMetadata }).clone ??
+  HERO_PHOTO.src;
+const ogWidth = Math.min(OG_WIDTH, heroMeta.width);
+const ogHeight = Math.min(OG_HEIGHT, heroMeta.height);
+const canonical = `${SITE_URL}/`;
+const ogImageUrl = new URL(ogImage.src, SITE_URL).href;
+const jsonLd = clothingStoreJsonLd(ogImageUrl);
 ---
 
 <!doctype html>
@@ -19,7 +48,23 @@ import { STORE_NAME } from "../constants";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{STORE_NAME}</title>
+    <title>{PAGE_TITLE}</title>
+    <meta name="description" content={META_DESCRIPTION} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0B1020" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="he_IL" />
+    <meta property="og:site_name" content={STORE_NAME} />
+    <meta property="og:title" content={PAGE_TITLE} />
+    <meta property="og:description" content={META_DESCRIPTION} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(ogWidth)} />
+    <meta property="og:image:height" content={String(ogHeight)} />
+    <meta property="og:image:alt" content={HERO_PHOTO.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- Structured data (PRD §3.6): data, not code — it never executes. -->
+    <script type="application/ld+json" is:inline set:html={jsonLdString(jsonLd)} />
   </head>
   <body>
     <slot />

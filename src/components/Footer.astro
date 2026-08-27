@@ -7,6 +7,7 @@ import {
   TIKTOK_URL,
 } from "../constants";
 import { callHref } from "../links";
+import Address from "./Address.astro";
 
 type Social = { href: string; label: string; path: string };
 
@@ -36,7 +37,7 @@ const socials: Social[] = (
 <footer class="footer">
   <div class="footer__inner">
     <p class="footer__name">{STORE_NAME}</p>
-    <p class="footer__meta">אבן גבירול <bdi>71</bdi>, קניון גן העיר, תל אביב</p>
+    <p class="footer__meta"><Address /></p>
     <p class="footer__meta">
       <a class="footer__phone" href={callHref()}><bdi>{PHONE_DISPLAY}</bdi></a>
     </p>
