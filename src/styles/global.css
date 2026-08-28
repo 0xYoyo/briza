@@ -68,8 +68,15 @@
   --font-display: "Secular One", "Arial Hebrew", system-ui;
   --font-body: "Assistant", "Arial Hebrew", system-ui;
   --font-quote: "Frank Ruhl Libre", "Arial Hebrew", system-ui;
-  --text-hero: clamp(40px, 11vw, 72px);
-  --text-h1: clamp(32px, 7.5vw, 48px);
+  /*
+   * Display steps. The 38–54px band belongs to the Story title alone
+   * ([story-owns-38-54]), so the offer numeral starts above it and every
+   * section heading stays below it.
+   */
+  --text-numeral: clamp(60px, 15vw, 112px);
+  --text-story-title: clamp(38px, 5.4vw, 54px);
+  --text-hero-line: clamp(22px, 3.4vw, 34px);
+  --text-story-body: clamp(21px, 1.7vw, 24px);
   --text-h2: clamp(26px, 6vw, 34px);
   --text-h3: 22px;
   --text-lead: clamp(20px, 4.8vw, 24px);
@@ -89,6 +96,8 @@
   --track-label: 0.04em;
   --measure-prose: 34ch;
   --measure-wide: 52ch;
+  /* Reading column inside a split panel — 50–60ch at every width */
+  --measure-column: 56ch;
 
   /* Spacing (DESIGN §2.4) — 4px base */
   --space-1: 4px;
@@ -111,6 +120,17 @@
   --stack: var(--space-5);
   --stack-loose: var(--space-8);
   --content-max: 1100px;
+  /*
+   * Split panels: half photograph, half text (DESIGN §2.1). The panel is
+   * sized from the LARGE viewport so a collapsing mobile URL bar can never
+   * pull two join pills onto one screen; --cta-clearance is the slack that
+   * keeps the Offer pill strictly below the hero pill + one viewport.
+   */
+  --panel-min: 100lvh;
+  --cta-clearance: var(--space-20);
+  --pane-pad: clamp(32px, 5vw, 88px);
+  /* Mosaic (DESIGN §2.7): tight seams, full-bleed */
+  --mosaic-gap: 8px;
   /* [tap-56] */
   --tap-min: 56px;
   --tap-lg: 64px;
@@ -127,6 +147,18 @@
     to top,
     rgba(11, 16, 32, 0.92) 0%,
     rgba(11, 16, 32, 0.72) 38%,
+    rgba(11, 16, 32, 0) 100%
+  );
+  /*
+   * The hero carries text over a lit shop interior, the brightest ground on
+   * the page, so its scrim is deeper than the generic one: at the eyebrow's
+   * height the ground is ~0.72 navy, which keeps ice-300 above 4.5:1
+   * ([contrast-aa]).
+   */
+  --scrim-hero: linear-gradient(
+    to top,
+    rgba(11, 16, 32, 0.95) 0%,
+    rgba(11, 16, 32, 0.8) 35%,
     rgba(11, 16, 32, 0) 100%
   );
   --scrim-flat: rgba(11, 16, 32, 0.55);
@@ -212,4 +244,45 @@ a {
 :focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/*
+ * The store name as live text for assistive tech and search engines while the
+ * photographed sign carries it visually ([wordmark-is-photo]). Clipped, not
+ * `display: none` — it must stay in the accessibility tree.
+ */
+.sr-only {
+  /* no visual role, so no display size either ([story-owns-38-54]) */
+  font: inherit;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/*
+ * [motion-on-entry] one-shot fade-and-rise the first time a block scrolls
+ * into view. Progressive enhancement: the hidden state exists only once the
+ * observer script has added `.js-reveal`, so with JavaScript off (or before
+ * the module runs) every block is simply visible. Nothing above the fold is
+ * marked, so a late class never flashes. Under reduced motion the whole rule
+ * set is absent — no hiding, no transition, nothing moves.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal [data-reveal] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+  }
+  .js-reveal [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
 }

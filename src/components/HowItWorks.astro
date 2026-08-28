@@ -1,15 +1,44 @@
 ---
+import { Image } from "astro:assets";
 import { writeHref } from "../links";
+import { STEP_PHOTOS } from "../photos";
 import Button from "./Button.astro";
 import Section from "./Section.astro";
+
+const STEPS = [
+  "אירית מעלה לקבוצה תמונות של סחורה חדשה, עם מידות ומחיר.",
+  "ראיתן משהו? כתבו לה ״שמרי לי״ — והיא שומרת לכן אותו בחנות.",
+  "באות למדוד בנחת, בלי התחייבות.",
+] as const;
+
+const steps = STEPS.map((line, i) => ({ line, photo: STEP_PHOTOS[i] }));
+
+// Three columns inside --content-max at ≥900px, full width below it.
+const SIZES = "(min-width: 900px) 350px, calc(100vw - 40px)";
 ---
 
-<Section>
+<Section shot="howitworks">
   <h2>איך זה עובד</h2>
   <ol class="steps">
-    <li>אירית מעלה לקבוצה תמונות של סחורה חדשה, עם מידות ומחיר.</li>
-    <li>ראיתן משהו? כתבו לה ״שמרי לי״ — והיא שומרת לכן אותו בחנות.</li>
-    <li>באות למדוד בנחת, בלי התחייבות.</li>
+    {
+      steps.map((step) => (
+        <li class="step" data-reveal>
+          <Image
+            class="step__photo"
+            src={step.photo.src}
+            alt={step.photo.alt}
+            widths={[360, 560, 760]}
+            sizes={SIZES}
+            format="webp"
+            quality={72}
+            loading="lazy"
+            decoding="async"
+            style={`object-position: ${step.photo.position ?? "50% 50%"}`}
+          />
+          <p class="step__line">{step.line}</p>
+        </li>
+      ))
+    }
   </ol>
   <div class="steps__action">
     <Button kind="secondary" href={writeHref()} icon="whatsapp">כתבו לאירית</Button>
@@ -18,38 +47,65 @@ import Section from "./Section.astro";
 
 <style>
   /*
-   * Numbered steps (DESIGN §2.7): the numeral is Secular One at h2 size in
-   * the accent blue at the inline-start of its line — no circles, connectors
-   * or icons ([no-card-grid]); lines are separated by --stack.
+   * Each step is a photograph of the thing the sentence describes, then its
+   * numeral, then the sentence. The numeral is Secular One in the accent blue
+   * at the inline-start of its line — no circles, connectors, icons or
+   * bordered tiles ([no-icon-card]).
    */
   .steps {
     display: grid;
-    gap: var(--stack);
-    max-inline-size: var(--measure-wide);
-    margin-block: var(--stack) 0;
+    gap: var(--space-10);
+    margin-block: var(--stack-loose) 0;
     padding: 0;
     list-style: none;
     counter-reset: step;
   }
 
-  .steps li {
+  .step {
+    counter-increment: step;
+  }
+
+  .step__photo {
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+  }
+
+  .step__line {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     column-gap: var(--space-4);
     align-items: baseline;
-    counter-increment: step;
+    margin-block-start: var(--stack);
+    max-inline-size: var(--measure-wide);
   }
 
-  .steps li::before {
+  .step__line::before {
     content: counter(step);
     font-family: var(--font-display);
     font-size: var(--text-h2);
     line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
     color: var(--text-accent);
   }
 
   .steps__action {
     display: flex;
     margin-block-start: var(--stack-loose);
+  }
+
+  @media (min-width: 900px) {
+    .steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-6);
+      margin-block-start: var(--space-12);
+    }
+
+    .steps__action {
+      margin-block-start: var(--space-12);
+    }
   }
 </style>

@@ -6,74 +6,99 @@ import { HERO_PHOTO } from "../photos";
 import Button from "./Button.astro";
 ---
 
-<section class="hero">
-  <Image
-    class="hero__photo"
-    src={HERO_PHOTO.src}
-    alt={HERO_PHOTO.alt}
-    loading="eager"
-    fetchpriority="high"
-    decoding="async"
-  />
-  <div class="hero__content">
-    <p class="hero__eyebrow">גן העיר, תל אביב</p>
-    <h1 class="hero__wordmark">{STORE_NAME}</h1>
-    <p class="hero__line">
-      בגדי נשים מיובאים, נבחרים ביד, במידות <bdi>38–54</bdi>. ואירית שעונה לכן באהבה.
-    </p>
-    <div class="hero__action">
-      <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+<section class="hero" data-shot="hero">
+  <div class="hero__frame">
+    <Image
+      class="hero__photo"
+      src={HERO_PHOTO.src}
+      alt={HERO_PHOTO.alt}
+      widths={[540, 900, 1400, 1800]}
+      sizes="100vw"
+      format="webp"
+      quality={74}
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
+  <div class="hero__panel">
+    <div class="hero__content">
+      <!--
+        [wordmark-is-photo] the lit sign in the photograph is the wordmark.
+        The name still exists as live text for assistive technology and for
+        search engines — it is simply never painted twice.
+      -->
+      <h1 class="sr-only">{STORE_NAME}</h1>
+      <p class="hero__eyebrow">גן העיר, תל אביב</p>
+      <p class="hero__line">בגדי נשים מיובאים, נבחרים ביד. ואירית שעונה לכן באהבה.</p>
+      <div class="hero__action">
+        <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+      </div>
     </div>
-    <p class="hero__sub"><bdi>10%</bdi> הנחה על הקנייה הראשונה לחברות הקבוצה</p>
   </div>
 </section>
 
 <style>
-  /* [loading-state] navy ground so the scrim and wordmark read before the photo arrives */
+  /*
+   * [loading-state] navy ground so the panel reads before the photo arrives.
+   * Below 900px the photograph takes every pixel the content block does not
+   * need, so the sign always survives the crop on a narrow frame; at ≥900px
+   * the photograph is the whole viewport and the content sits over the
+   * scrim, bottom-start.
+   */
   .hero {
-    position: relative;
     display: grid;
-    align-items: end;
-    min-block-size: 88svh;
-    overflow: hidden;
+    grid-template-rows: minmax(0, 1fr) auto;
+    /*
+     * The whole hero composition — sign, line, pill — must be visible above
+     * the sticky bar, so the bar's reserved height comes out of the first
+     * screen rather than sitting on top of the join button.
+     */
+    min-block-size: calc(
+      100svh - var(--sticky-bar-height) - env(safe-area-inset-bottom, 0px)
+    );
     background: var(--surface-inverse);
     color: var(--text-on-inverse);
   }
 
-  /*
-   * [wordmark-once] below 900px the photo is oversized and bottom-anchored so
-   * the photographed sign (top ~18% of the frame) is cropped out; the text
-   * wordmark is the only store name on screen.
-   */
-  .hero__photo {
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 0;
-    inline-size: 100%;
-    block-size: 130%;
-    object-fit: cover;
-    object-position: 50% 100%;
+  .hero__frame {
+    position: relative;
+    min-block-size: 0;
+    overflow: hidden;
   }
 
-  .hero::after {
+  .hero__photo {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    /* keep the sign band, top ~15% of the frame, inside every crop */
+    object-position: 50% 0%;
+  }
+
+  /*
+   * [contrast-aa] the scrim covers the lower third only and lands on the
+   * navy panel, so photograph and panel read as one dark field.
+   */
+  .hero__frame::after {
     content: "";
     position: absolute;
-    inset: 0;
-    background: var(--scrim-bottom);
+    inset-block-start: 62%;
+    inset-block-end: 0;
+    inset-inline: 0;
+    background: var(--scrim-hero);
+  }
+
+  .hero__panel {
+    position: relative;
   }
 
   .hero__content {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     inline-size: 100%;
     max-inline-size: var(--content-max);
     margin-inline: auto;
-    padding-block: var(--section-y) var(--space-10);
+    padding-block: var(--space-6) var(--space-10);
     padding-inline: var(--gutter);
-    text-align: center;
+    text-align: start;
   }
 
   .hero__eyebrow {
@@ -84,56 +109,50 @@ import Button from "./Button.astro";
     color: var(--text-on-inverse-muted);
   }
 
-  /* [wordmark-is-text] live text in the display face; glow on the wordmark only */
-  .hero__wordmark {
+  .hero__line {
+    max-inline-size: 26ch;
     margin-block-start: var(--stack-tight);
     font-family: var(--font-display);
     font-weight: var(--weight-regular);
-    font-size: var(--text-hero);
-    line-height: var(--leading-tight);
-    letter-spacing: var(--track-sign);
-    color: var(--text-on-inverse);
-    text-shadow: var(--glow-sign);
-  }
-
-  .hero__line {
-    max-inline-size: var(--measure-wide);
-    margin-block-start: var(--stack);
-    font-size: var(--text-lead);
+    font-size: var(--text-hero-line);
     line-height: var(--leading-snug);
+    letter-spacing: var(--track-display);
+    color: var(--text-on-inverse);
   }
 
   .hero__action {
-    inline-size: 100%;
     display: flex;
-    justify-content: center;
     margin-block-start: var(--stack-loose);
-  }
-
-  .hero__sub {
-    margin-block-start: var(--stack-tight);
-    color: var(--text-on-inverse-muted);
   }
 
   @media (min-width: 900px) {
     .hero {
-      min-block-size: 0;
-      block-size: 80vh;
-      max-block-size: 80vh;
+      grid-template-rows: 1fr;
+      block-size: 100svh;
+      min-block-size: 100svh;
     }
-    /*
-     * [wordmark-once] at ≥900px the frame shows ~50% of the 1028×1024 source
-     * (e.g. 640 of 1275px at 1280×800); anchoring at 45% starts the crop
-     * below the sign band (top ~18%) so the lit interior and mannequins are
-     * the subject and only the text wordmark carries the name.
-     */
-    .hero__photo {
-      inset: 0;
-      block-size: 100%;
-      object-position: 50% 45%;
+
+    /* photograph and panel share one cell; the panel hangs at the bottom */
+    .hero__frame,
+    .hero__panel {
+      grid-area: 1 / 1;
     }
+
+    .hero__panel {
+      align-self: end;
+    }
+
+    .hero__frame::after {
+      inset-block-start: 46%;
+    }
+
     .hero__content {
+      padding-block-end: var(--space-12);
       padding-inline: var(--gutter-wide);
+    }
+
+    .hero__line {
+      max-inline-size: 22ch;
     }
   }
 </style>

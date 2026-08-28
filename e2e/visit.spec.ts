@@ -82,9 +82,23 @@ test.describe("Visit", () => {
     for (const link of [read, write]) {
       await expect(link).toHaveAttribute("target", "_blank");
       await expect(link).toHaveAttribute("rel", "noopener");
-      expect(
-        await link.evaluate((el) => getComputedStyle(el).textDecorationLine),
-      ).toBe("underline");
+      // [review-pills] pale pills on the navy band, not bare underlines
+      const pill = await link.evaluate((el) => {
+        const cs = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        return {
+          decoration: cs.textDecorationLine,
+          radius: Number.parseFloat(cs.borderStartStartRadius),
+          background: cs.backgroundColor,
+          height: r.height,
+        };
+      });
+      expect(pill.decoration).toBe("none");
+      expect(pill.radius).toBeGreaterThanOrEqual(pill.height / 2);
+      // pale, never WhatsApp green [green-is-join]
+      expect(pill.background).not.toBe("rgb(37, 211, 102)");
+      expect(pill.background).toBe("rgb(213, 233, 246)");
+      expect(pill.height).toBeGreaterThanOrEqual(56);
     }
     await expect(page.locator("blockquote")).toHaveCount(0);
   });

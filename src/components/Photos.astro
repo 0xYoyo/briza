@@ -9,28 +9,26 @@ type Props = {
 
 const { photos } = Astro.props;
 
-// Tile width: 2 columns inside the page gutters below 900px, 3 columns inside
-// the --content-max column at ≥900px (gap --space-3 = 12px).
-const SIZES =
-  "(min-width: 900px) calc((min(100vw - 80px, 1100px) - 24px) / 3), calc((100vw - 52px) / 2)";
+// Full-bleed: three columns of the viewport at ≥900px, two below it.
+const SIZES = "(min-width: 900px) 34vw, 51vw";
 ---
 
 {
   // [empty-collapses] an empty list renders nothing — no heading, no wrapper.
   photos.length > 0 && (
-    <Section>
+    <Section shot="photos" bleed>
       <h2>מהמדפים שלנו</h2>
-      <ul class="grid">
-        {photos.map((photo) => (
-          <li>
+      <ul class="mosaic" slot="bleed">
+        {photos.map((photo, i) => (
+          <li class={`mosaic__cell mosaic__cell--${i + 1}`}>
             <Image
-              class="grid__img"
+              class="mosaic__img"
               src={photo.src}
               alt={photo.alt}
-              widths={[400, 600, 800]}
+              widths={[360, 560, 760]}
               sizes={SIZES}
-              width={800}
               format="webp"
+              quality={70}
               loading="lazy"
               decoding="async"
             />
@@ -43,33 +41,109 @@ const SIZES =
 
 <style>
   /*
-   * Photos grid (DESIGN §2.7): 2 columns <900px, 3 at ≥900px, 4:5 tiles,
-   * --radius-md, gap --space-3. [not-catalog] no caption, link, hover state
-   * or overlay per photo. [loading-state] --surface-raised placeholder at
-   * the final aspect ratio while lazy images arrive.
+   * A mosaic, not a grid: the two shots of a hand holding an item run two
+   * rows tall, so the wall of clothes has a rhythm instead of a spreadsheet.
+   * Full-bleed, 8px seams. [not-catalog] no caption, link, hover state or
+   * overlay per photo. The container's aspect ratio drives the row height, so
+   * every cell is sized from the viewport width alone and nothing reflows on
+   * load ([no-layout-shift]). Cells are placed by hand at both breakpoints —
+   * auto-placement leaves a hole once two frames span.
    */
-  .grid {
+  .mosaic {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3);
-    margin-block: var(--stack) 0;
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    aspect-ratio: 8 / 25;
+    /* the section is a flex column: opt out of content-based minimum height
+       so `aspect-ratio` alone sets the row height */
+    min-block-size: 0;
+    gap: var(--mosaic-gap);
+    margin-block: var(--stack-loose) 0;
     padding: 0;
     list-style: none;
   }
 
-  .grid__img {
-    display: block;
-    inline-size: 100%;
-    block-size: auto;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    border-radius: var(--radius-md);
+  .mosaic__cell {
+    min-block-size: 0;
+    overflow: hidden;
     background: var(--surface-raised);
   }
 
+  /*
+   * 2 columns × 5 rows; cells 1–7 are photos 03 05 06 08 09 10 11. Placement
+   * keeps the three paper-bag frames off each other's edges.
+   */
+  .mosaic__cell--1 {
+    grid-row: 4;
+    grid-column: 2;
+  }
+  .mosaic__cell--2 {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
+  .mosaic__cell--3 {
+    grid-row: 1;
+    grid-column: 1;
+  }
+  .mosaic__cell--4 {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .mosaic__cell--5 {
+    grid-row: 3;
+    grid-column: 2;
+  }
+  .mosaic__cell--6 {
+    grid-row: 3 / span 2;
+    grid-column: 1;
+  }
+  .mosaic__cell--7 {
+    grid-row: 5;
+    grid-column: 1 / span 2;
+  }
+
+  .mosaic__img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
   @media (min-width: 900px) {
-    .grid {
+    /* 3 columns × 3 rows; the two hand shots span rows 1–2 and 2–3 */
+    .mosaic {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      aspect-ratio: 5 / 4;
+      margin-block-start: var(--space-12);
+    }
+    .mosaic__cell--1 {
+      grid-row: 2;
+      grid-column: 3;
+    }
+
+    .mosaic__cell--2 {
+      grid-row: 2 / span 2;
+      grid-column: 2;
+    }
+    .mosaic__cell--3 {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .mosaic__cell--4 {
+      grid-row: 1;
+      grid-column: 3;
+    }
+    .mosaic__cell--5 {
+      grid-row: 3;
+      grid-column: 3;
+    }
+    .mosaic__cell--6 {
+      grid-row: 1 / span 2;
+      grid-column: 1;
+    }
+    .mosaic__cell--7 {
+      grid-row: 3;
+      grid-column: 1;
     }
   }
 </style>

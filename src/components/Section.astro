@@ -5,17 +5,31 @@
  * `--content-max` with the page gutters; headings align start.
  */
 type Props = {
-  /** Only the Offer sits on the sand surface (DESIGN §2.1). */
-  surface?: "page" | "sand";
+  surface?: "page" | "sand" | "inverse";
+  /** Section content runs to the viewport edge (the photo mosaic). */
+  bleed?: boolean;
+  /** Names the section in the DOM for screenshots and tests. */
+  shot: string;
 };
 
-const { surface = "page" } = Astro.props;
+const { surface = "page", bleed = false, shot } = Astro.props;
 ---
 
-<section class:list={["section", { "section--sand": surface === "sand" }]}>
+<section
+  class:list={[
+    "section",
+    {
+      "section--sand": surface === "sand",
+      "section--inverse": surface === "inverse",
+      "section--bleed": bleed,
+    },
+  ]}
+  data-shot={shot}
+>
   <div class="section__inner">
     <slot />
   </div>
+  <slot name="bleed" />
 </section>
 
 <style>
@@ -28,6 +42,19 @@ const { surface = "page" } = Astro.props;
 
   .section--sand {
     background: var(--surface-sand);
+  }
+
+  .section--inverse {
+    background: var(--surface-inverse);
+    color: var(--text-on-inverse);
+  }
+
+  /* The mosaic runs to the viewport edge; only the heading keeps the gutter. */
+  .section--bleed {
+    padding-inline: 0;
+  }
+  .section--bleed .section__inner {
+    padding-inline: var(--gutter);
   }
 
   .section__inner {
@@ -47,12 +74,18 @@ const { surface = "page" } = Astro.props;
     font-size: var(--text-h2);
     line-height: var(--leading-tight);
     letter-spacing: var(--track-display);
-    color: var(--text-body);
+    color: inherit;
   }
 
   @media (min-width: 900px) {
     .section {
       padding-block: var(--section-y-lg);
+      padding-inline: var(--gutter-wide);
+    }
+    .section--bleed {
+      padding-inline: 0;
+    }
+    .section--bleed .section__inner {
       padding-inline: var(--gutter-wide);
     }
   }

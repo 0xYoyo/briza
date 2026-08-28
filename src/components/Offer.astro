@@ -1,50 +1,64 @@
 ---
 import { joinHref } from "../links";
+import { OFFER_PHOTO } from "../photos";
 import Button from "./Button.astro";
-import Section from "./Section.astro";
+import Split from "./Split.astro";
 ---
 
-<Section surface="sand">
-  <div class="offer">
-    <div class="offer__text">
-      <h2><bdi>10%</bdi> הנחה על הקנייה הראשונה</h2>
-      <p class="offer__body">
-        קבוצת הוואטסאפ של בריזה היא קבוצה שקטה — רק אירית כותבת בה, וכל סחורה חדשה מופיעה שם
-        ראשונה. הצטרפו, ובקנייה הראשונה בחנות הראו בקופה שאתן בקבוצה ותקבלו <bdi>10%</bdi> הנחה.
-      </p>
-    </div>
-    <div class="offer__action">
-      <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
-    </div>
+<Split
+  photo={OFFER_PHOTO}
+  side="start"
+  surface="sand"
+  align="between"
+  tall
+  ratio="4 / 5"
+  shot="offer"
+>
+  <h2 class="offer__heading">
+    <!--
+      The numeral is the heading's own first word, set at display size — one
+      statement, not a badge repeating the sentence beside it. The <bdi> is
+      wrapped so its LTR run never drags the line's alignment with it.
+    -->
+    <span class="offer__numeral"><bdi>10%</bdi></span>
+    <span class="offer__rest">הנחה על הקנייה הראשונה</span>
+  </h2>
+  <div class="offer__tail">
+  <p class="offer__body">
+    קבוצת הוואטסאפ של בריזה היא קבוצה שקטה — רק אירית כותבת בה, וכל סחורה חדשה מופיעה שם
+    ראשונה. הצטרפו, ובקנייה הראשונה בחנות הראו בקופה שאתן בקבוצה ותקבלו <bdi>10%</bdi> הנחה.
+  </p>
+  <div class="offer__action">
+    <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
   </div>
-</Section>
+  </div>
+</Split>
 
 <style>
-  /*
-   * [one-cta] the Offer pill must never share a viewport with the hero pill,
-   * which means its top edge sits ≥ 1 viewport below the hero pill's bottom
-   * edge. The hero pill's bottom is 83px above the hero's bottom edge
-   * (--space-10 padding + the sub-line + --stack-tight), so with the pill at
-   * the end of this block the minimum block size is 100svh − 83px + 64px
-   * (pill) − section padding; 100lvh − --space-16 covers both breakpoints.
-   * The LARGE viewport (lvh) is the one that matters: once a phone's URL bar
-   * collapses the visible viewport grows by ~56px, and a block sized from
-   * svh would let the bottom of the hero pill and the top of this pill share
-   * a screen. Plain 100vh is the large viewport on browsers without lvh.
-   * Heading and paragraph sit at the section's normal top rhythm; the
-   * remaining height is the one gap [one-cta] forces, between paragraph and
-   * pill. [no-card-grid] typographic only — no box, border or card.
-   */
-  .offer {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-block-size: calc(100vh - var(--space-16));
-    min-block-size: calc(100lvh - var(--space-16));
+  .offer__heading {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
+    color: var(--text-body);
+  }
+
+  /* [rtl-numerals] an isolated LTR run; the display step above the 38–54 band */
+  .offer__numeral {
+    display: block;
+    font-size: var(--text-numeral);
+    line-height: 0.92;
+    color: var(--text-accent);
+  }
+
+  .offer__rest {
+    display: block;
+    margin-block-start: var(--space-2);
+    font-size: var(--text-h2);
   }
 
   .offer__body {
-    max-inline-size: var(--measure-prose);
+    max-inline-size: var(--measure-column);
     margin-block-start: var(--stack);
     font-size: var(--text-body-lg);
     line-height: var(--leading-body);
@@ -52,7 +66,12 @@ import Section from "./Section.astro";
 
   .offer__action {
     display: flex;
-    margin-block-start: auto;
-    padding-block-start: var(--stack-loose);
+    margin-block-start: var(--stack-loose);
+  }
+
+  @media (min-width: 900px) {
+    .offer__body {
+      margin-block-start: 0;
+    }
   }
 </style>

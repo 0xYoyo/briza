@@ -1,5 +1,6 @@
 # Briza (בריזה) — PRD
-Version: 2 · Date: 2026-08-26
+Version: 2 · Date: 2026-08-26 · §3.1/§3.5/§5.1 amended 2026-08-27
+(founder-approved makeover; see §5.1).
 Supersedes v1 (2026-08-05). v2 reconciles the PRD with every decision made in
 the 2026-08-24/26 sessions: site direction, page content and copy, facts
 register, hosting, DESIGN.md gate, milestone restructure, checklist state.
@@ -39,29 +40,36 @@ retail business; no app logic beyond one computed open/closed line.
 ## 3. v1 scope
 
 ### 3.1 Page structure (top to bottom, mobile-first)
-1. **Hero** — storefront photo with the glowing בריזה sign (scrimmed), store
-   name as text styled after the sign (no separate logo file), one-line
-   value line, ONE primary button: join the WhatsApp updates group. Sub-line
-   under the button: the 10% first-purchase offer in one clause.
-2. **Offer** — a full section, not a footnote: the 10% first-purchase
-   discount for group members, what the group is (silent, admin-only, new
-   stock appears there first), and how the discount is claimed (show the
-   group at the register). Primary button repeated.
-3. **How it works** — three short numbered lines: owner posts new stock in
-   the group → customer writes "שמרי לי" → she reserves it in the store; come
-   try it on, no obligation. Secondary button: write to Irit (WhatsApp chat).
+1. **Hero** — a full-screen storefront photo. The photographed בריזה sign
+   IS the wordmark; the name also exists as a visually hidden `<h1>` for
+   assistive technology and search. Gradient scrim over the lower third
+   only, then eyebrow, one value line and ONE primary button (join the
+   WhatsApp updates group), bottom-start.
+2. **Offer** — a split panel, half photograph: the 10% first-purchase
+   discount for group members set as a display numeral, what the group is
+   (silent, admin-only, new stock appears there first), and how the discount
+   is claimed (show the group at the register). Primary button repeated.
+3. **How it works** — three short numbered lines, each with a photograph of
+   what the line describes: owner posts new stock in the group → customer
+   writes "שמרי לי" → she reserves it in the store; come try it on, no
+   obligation. Secondary button: write to Irit (WhatsApp chat).
 4. **Story** — short, owner-centered (אירית is the protagonist; her father
-   Dorian gets one warm line). No photo of the owner.
+   Dorian gets one warm line), as a reversed split panel. No photo of the
+   owner.
 5. **Photos** — 6–10 launch photos of CLOTHES (racks, prints, hand holding an
-   item on a hanger), rendered from a config list so files can be swapped
-   without layout work. Caption "מהמדפים שלנו" — never "new" or "this week".
-6. **Visit** — address, opening hours table, computed open/closed line
-   (§3.3), map link + navigate button, click-to-call, and the primary join
-   button once more.
-7. **Google reviews** — two links: read reviews on Google, write a review.
-   No quotes reproduced on the page; the links are the social proof.
-8. **Footer** — name, address, phone, social links (configurable, each
-   individually hideable; only TikTok is expected at launch).
+   item on a hanger) as a full-bleed mosaic, rendered from a config list so
+   files can be swapped without layout work. Caption "מהמדפים שלנו" — never
+   "new" or "this week".
+6. **Visit** — a split panel beside the shopfront seen from the mall
+   corridor: address, opening hours table, computed open/closed line (§3.3),
+   map link + navigate button, click-to-call, and the primary join button
+   once more.
+7. **Google reviews** — a short inverse band: one line and two pale pill
+   links, read reviews on Google and write a review. No quotes reproduced on
+   the page; the links are the social proof.
+8. **Footer** — one compact row: name, address, phone, social links
+   (configurable, each individually hideable; only TikTok is expected at
+   launch).
 
 A sticky bottom bar on mobile carries the secondary "write to Irit" WhatsApp
 action and a call icon; the primary join action lives in the sections, not
@@ -113,12 +121,14 @@ Conventions: Hebrew only, second-person feminine plural, warm and factual,
 no superlatives, no urgency, digits/prices/phones LTR inside RTL lines, no
 emoji on the site.
 
-**Hero**
+**Hero** (amended 2026-08-27)
 - Eyebrow: `גן העיר, תל אביב`
-- Title: `בריזה`
-- Line: `בגדי נשים מיובאים, נבחרים ביד, במידות 38–54. ואירית שעונה לכן באהבה.`
+- Title: `בריזה` — the photographed sign carries it; the same word is a
+  visually hidden `<h1>`, never painted a second time.
+- Line: `בגדי נשים מיובאים, נבחרים ביד. ואירית שעונה לכן באהבה.`
 - Primary button: `הצטרפו לקבוצת העדכונים`
-- Sub-line: `10% הנחה על הקנייה הראשונה לחברות הקבוצה`
+- No sub-line: the 10% offer is the Offer panel's display numeral one screen
+  below, where it is louder than a caption under the hero button was.
 
 **Offer**
 - Heading: `10% הנחה על הקנייה הראשונה`
@@ -186,21 +196,59 @@ she gets for joining the group, and can tap exactly once to join, write, call
 or navigate.
 
 ### 5.1 Design-binding decisions (input to docs/DESIGN.md)
-These are settled and are not re-litigated in the design session:
-- Scrimmed photo hero: KEEP (founder's call).
-- Exactly one primary CTA visible at a time; the sticky bar carries the
-  secondary action only.
-- No icon-card grids and no template "feature cards"; the offer and
-  how-it-works sections are typographic, with photography carrying warmth.
-- No pull-quote / testimonial block of any kind.
-- On mobile the photo sign and the text wordmark must not both read as the
-  store name at once (avoid the double-בריזה).
-- Sizes 38–54 appear in the hero line and story, never as a badge.
-- Palette and type are harvested from the Claude Design kit committed at
-  `design/kit/` (navy/ice + cream/wood, Secular One / Assistant / Frank Ruhl
-  Libre, glow token, 56–64px targets); the kit's compositions and example
-  copy are NOT adopted.
-- Photographs are of clothes and hands, not of ceilings and doorframes.
+*Amended 2026-08-27 — founder-approved makeover, replacing the pre-makeover
+list. The first build was correct and shipped every link, fact and test, but
+on desktop it read like a document: one right-pinned 34ch column in an
+1100px box, photographs quarantined in a single grid instead of structuring
+the page, a viewport-tall Offer with nothing in it, and reviews and footer as
+bare underlined links. These decisions replace it and are not re-litigated in
+the design session.*
+
+**The one idea: the shop is the layout.** Every major section below the hero
+is roughly half photograph. Full-bleed photo panels alternate sides against a
+real reading column (50–60ch, vertically centred); on phones each panel
+stacks, photograph over text, the photograph still edge to edge.
+
+- **The photographed sign is the wordmark.** The hero is a full-screen
+  storefront photo, scrimmed over its lower third only, and the lit בריזה
+  sign carries the name. The name stays live text as a visually hidden
+  `<h1>`, so search and screen readers still get it; it is never painted a
+  second time while the photo renders. This inverts the old rule, which
+  cropped the sign away in favour of a text wordmark.
+- **No cream strip after the hero.** The hero runs to a full screen and the
+  first panel starts at its edge.
+- **Exactly one primary CTA visible at a time**, expressed as what the reader
+  sees rather than as a fixed distance: no two join pills may share a screen.
+  The sticky bar still carries the secondary action only.
+- **Sections are sized by their content**, never padded out to a viewport.
+  The one exception is the Offer panel, which is sized from the large
+  viewport so the rule above holds while a mobile URL bar collapses.
+- **The 10% numeral is sanctioned** as the Offer heading's own first word at
+  display size. It is a typographic statement, not a badge, chip or stat
+  tile, and it does not repeat a sentence set beside it.
+- **No icon-card grids and no template "feature cards".** How it works is
+  three photographs, three numerals and three sentences — no boxes, borders
+  or icon tiles.
+- **No pull-quote / testimonial block of any kind.** Reviews are a short
+  inverse band: one line and two pale pill links, not bare underlines.
+- **The photo grid is a mosaic, not a spreadsheet** — full-bleed, tight
+  seams, the two hand-holding-an-item frames running two rows tall.
+- **38–54px is the Story title's band alone.** No other display step on the
+  page may land in it: the Offer numeral starts above it, every heading stops
+  below it. (The clothing sizes 38–54 left the hero line by founder order and
+  now appear only in the meta description; if the founder wants the fact back
+  on the page it needs one new copy line, which this makeover did not take.)
+- **One deliberate risk, everything else disciplined:** the site opens with
+  no typographic logo at all, and the photo mosaic runs to the viewport edge.
+- **Motion:** a single one-shot fade-and-rise as a block first enters view,
+  progressive-enhancement only, absent entirely under reduced motion.
+- Palette and type are unchanged and still harvested from the Claude Design
+  kit at `design/kit/` (navy/ice + cream/sand/wood, Secular One / Assistant /
+  Frank Ruhl Libre, glow token, 56–64px targets); the failure was layout, not
+  colour. The kit's compositions and example copy are still not adopted.
+- **Photographs are of clothes and hands**, not of ceilings and doorframes.
+  The one interior-context frame — the shopfront from the mall corridor —
+  carries the Visit panel, where finding the door is the whole point.
 
 ## 6. Data & accounts
 No user accounts, no forms, no stored data, no cookies requiring consent.

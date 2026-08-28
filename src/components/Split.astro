@@ -1,0 +1,154 @@
+---
+/**
+ * Split panel — the page's structural unit (DESIGN §2.1): one half is a
+ * full-bleed photograph running to the viewport edge, the other half is a
+ * real reading column at `--measure-column`, vertically centred. Panels
+ * alternate the photograph from side to side down the page. Below 900px the
+ * panel stacks: photograph over text, the photograph still edge to edge.
+ */
+import { Image } from "astro:assets";
+import type { Photo } from "../photos";
+
+type Props = {
+  photo: Photo;
+  /** Which side the photograph takes at ≥900px. Panels alternate. */
+  side?: "start" | "end";
+  surface?: "page" | "sand";
+  /** `between` anchors the column's first and last block to the panel edges. */
+  align?: "center" | "between";
+  /** Panels that must clear a full viewport from the pill above them. */
+  tall?: boolean;
+  /** Aspect ratio of the stacked photograph below 900px. */
+  ratio?: string;
+  /** Names the section in the DOM for screenshots and tests. */
+  shot: string;
+};
+
+const {
+  photo,
+  side = "start",
+  surface = "page",
+  align = "center",
+  tall = false,
+  ratio = "1 / 1",
+  shot,
+} = Astro.props;
+
+// One half of the viewport at ≥900px, the full width below it.
+const SIZES = "(min-width: 900px) 50vw, 100vw";
+---
+
+<section
+  class:list={[
+    "panel",
+    `panel--${side}`,
+    `panel--${align}`,
+    { "panel--sand": surface === "sand", "panel--tall": tall },
+  ]}
+  data-shot={shot}
+  style={`--split-ratio: ${ratio}; --split-position: ${photo.position ?? "50% 50%"};`}
+>
+  <div class="panel__photo">
+    <Image
+      src={photo.src}
+      alt={photo.alt}
+      widths={[440, 720, 1000, 1400]}
+      sizes={SIZES}
+      format="webp"
+      quality={72}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="panel__text">
+    <div class="panel__column" data-reveal>
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .panel {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: var(--surface-page);
+  }
+
+  .panel--sand {
+    background: var(--surface-sand);
+  }
+
+  .panel__photo {
+    position: relative;
+    aspect-ratio: var(--split-ratio);
+    background: var(--surface-raised);
+  }
+
+  .panel__photo :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--split-position);
+  }
+
+  .panel__text {
+    display: flex;
+    padding-block: var(--section-y);
+    padding-inline: var(--gutter);
+  }
+
+  .panel__column {
+    inline-size: 100%;
+    max-inline-size: var(--measure-column);
+  }
+
+  @media (min-width: 900px) {
+    .panel {
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      min-block-size: 84lvh;
+    }
+
+    /* The alternating half. `order` is direction-agnostic ([logical-props]). */
+    .panel--end .panel__photo {
+      order: 2;
+    }
+
+    .panel--tall {
+      min-block-size: calc(var(--panel-min) + var(--cta-clearance));
+    }
+
+    .panel__photo {
+      aspect-ratio: auto;
+      block-size: 100%;
+    }
+
+    .panel__text {
+      align-items: center;
+      padding-block: var(--section-y-lg);
+      padding-inline: var(--pane-pad);
+    }
+
+    /*
+     * A poster column: the heading group holds the top edge, the body and the
+     * action hold the bottom edge, and the panel's height is the space
+     * between them — not a void under a paragraph.
+     */
+    .panel--between .panel__text {
+      align-items: stretch;
+      /*
+       * The action holds the panel's lower edge: a shallower bottom padding
+       * both reads as deliberate and buys the clearance [one-cta] needs
+       * between this pill and the hero's.
+       */
+      padding-block: var(--section-y-lg) var(--space-10);
+    }
+    .panel--between .panel__column {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-12);
+    }
+  }
+</style>

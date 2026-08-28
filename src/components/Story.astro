@@ -1,28 +1,41 @@
 ---
 import { STORE_NAME } from "../constants";
-import Section from "./Section.astro";
+import { STORY_PHOTO } from "../photos";
+import Split from "./Split.astro";
 ---
 
-<Section>
-  <h2>{STORE_NAME}</h2>
+<Split photo={STORY_PHOTO} side="end" ratio="4 / 5" shot="story">
+  <h2 class="story__title">{STORE_NAME}</h2>
   <p class="story__body">
     את בריזה פתח אבא של אירית, דוריאן, לפני כארבעים שנה. היום אירית מנהלת אותה בעצמה: בוחרת כל
     פריט ביד, מזמינה בכמויות קטנות, ועונה לכן בעצמה בוואטסאפ. בלי מותגים גדולים ובלי אופנה מהירה —
     בגדים יפים שנוח ללבוש, במחירים שמתחילים ב־<bdi>₪79</bdi>. אצלנו לא ממהרים.
   </p>
-</Section>
+</Split>
 
 <style>
+  /*
+   * [story-owns-38-54] the 38–54px band is the Story title's alone; every
+   * other display step on the page sits above or below it.
+   */
+  .story__title {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-story-title);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
+    color: var(--text-body);
+  }
+
   /*
    * The Story body is the page's one use of --font-quote (DESIGN §2.3) — a
    * serif voice for Irit's passage without a quote block ([no-testimonial]).
    * [rtl-numerals] the price is an isolated LTR run via <bdi>.
    */
   .story__body {
-    max-inline-size: var(--measure-prose);
     margin-block-start: var(--stack);
     font-family: var(--font-quote);
-    font-size: var(--text-body-lg);
+    font-size: var(--text-story-body);
     line-height: var(--leading-body);
   }
 </style>

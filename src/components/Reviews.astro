@@ -1,47 +1,112 @@
 ---
 import { GBP_REVIEWS_URL, GBP_WRITE_REVIEW_URL } from "../constants";
-import Section from "./Section.astro";
+
+const LINKS = [
+  { href: GBP_REVIEWS_URL, label: "לביקורות בגוגל" },
+  { href: GBP_WRITE_REVIEW_URL, label: "כתבו לנו ביקורת" },
+];
 ---
 
-<Section>
-  <h2>מה אומרות עלינו</h2>
-  <ul class="reviews">
-    <li>
-      <a href={GBP_REVIEWS_URL} target="_blank" rel="noopener">לביקורות בגוגל</a>
-    </li>
-    <li>
-      <a href={GBP_WRITE_REVIEW_URL} target="_blank" rel="noopener">כתבו לנו ביקורת</a>
-    </li>
-  </ul>
-</Section>
+<section class="reviews" data-shot="reviews">
+  <div class="reviews__inner" data-reveal>
+    <h2 class="reviews__heading">מה אומרות עלינו</h2>
+    <ul class="reviews__links">
+      {
+        LINKS.map((link) => (
+          <li>
+            <a class="reviews__pill" href={link.href} target="_blank" rel="noopener">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
 
 <style>
   /*
+   * A short inverse band, not a section: one line and two pale pills.
    * [no-testimonial] social proof is two links — no quote, star, rating or
-   * avatar. Links per DESIGN §2.7: --link, underlined, offset 3px, 1.5px.
+   * avatar. The band sits on navy-800 and the footer on navy-900, so the two
+   * inverse blocks separate without a divider (DESIGN §2.1).
    */
   .reviews {
+    background: var(--surface-inverse-2);
+    color: var(--text-on-inverse);
+    padding-block: var(--space-10);
+    padding-inline: var(--gutter);
+  }
+
+  .reviews__inner {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--stack-tight);
-    margin-block: var(--stack) 0;
+    gap: var(--stack);
+    inline-size: 100%;
+    max-inline-size: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .reviews__heading {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-h2);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
+  }
+
+  .reviews__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 
-  /* [tap-56] text links still get a 56px hit area */
-  .reviews a {
+  /*
+   * [tap-56] pale pill, 56px tall. [contrast-aa] navy-900 on ice-200 is
+   * 14.4:1; [green-is-join] nothing here is green, so a review never reads
+   * as the join action.
+   */
+  .reviews__pill {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     min-block-size: var(--tap-min);
-    color: var(--link);
-    text-decoration-line: underline;
-    text-decoration-thickness: 1.5px;
-    text-underline-offset: 3px;
-    transition: color var(--dur-base) var(--ease-out);
+    padding-block: var(--space-3);
+    padding-inline: var(--space-8);
+    border-radius: var(--radius-pill);
+    background: var(--ice-200);
+    color: var(--navy-900);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-label);
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
-  .reviews a:hover {
-    color: var(--link-hover);
+  .reviews__pill:hover {
+    background: var(--ice-100);
+  }
+  .reviews__pill:active {
+    transform: scale(var(--press-scale));
+  }
+
+  @media (min-width: 900px) {
+    .reviews {
+      padding-block: var(--space-12);
+      padding-inline: var(--gutter-wide);
+    }
+    .reviews__inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-8);
+    }
+    .reviews__links {
+      flex: none;
+    }
   }
 </style>
