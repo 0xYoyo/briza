@@ -2,15 +2,16 @@
 import { HOURS, MAPS_URL } from "../constants";
 import { hoursRows } from "../hours";
 import { callHref, joinHref } from "../links";
+import { VISIT_PHOTO } from "../photos";
 import Address from "./Address.astro";
 import Button from "./Button.astro";
-import Section from "./Section.astro";
+import Split from "./Split.astro";
 
 const rows = hoursRows(HOURS);
 ---
 
-<Section>
-  <h2>גן העיר, קומת כניסה</h2>
+<Split photo={VISIT_PHOTO} side="start" surface="sand" ratio="1 / 1" shot="visit">
+  <h2 class="visit__heading">גן העיר, קומת כניסה</h2>
   <p class="visit__address"><Address /></p>
   <div class="visit__hours">
     <p class="visit__status" data-status hidden></p>
@@ -40,25 +41,18 @@ const rows = hoursRows(HOURS);
     <Button kind="secondary" href={callHref()} icon="phone">התקשרו</Button>
     <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
   </div>
-</Section>
-
-<!--
-  [no-js-state] the page's only script: compute the open/closed line from
-  HOURS in Israel time and reveal the slot. Without JS the slot stays hidden
-  and nothing else changes. [error-none] no fetch, nothing else touched.
--->
-<script>
-  import { HOURS } from "../constants";
-  import { formatStatusLine, getStatus } from "../hours";
-
-  const slot = document.querySelector<HTMLElement>("[data-status]");
-  if (slot) {
-    slot.textContent = formatStatusLine(getStatus(new Date(), HOURS));
-    slot.removeAttribute("hidden");
-  }
-</script>
+</Split>
 
 <style>
+  .visit__heading {
+    font-family: var(--font-display);
+    font-weight: var(--weight-regular);
+    font-size: var(--text-h2);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--track-display);
+    color: var(--text-body);
+  }
+
   .visit__address {
     margin-block-start: var(--stack-tight);
     color: var(--text-muted);
@@ -72,7 +66,6 @@ const rows = hoursRows(HOURS);
   .visit__hours {
     position: relative;
     margin-block-start: var(--stack-loose);
-    max-inline-size: var(--measure-wide);
   }
 
   .visit__status {
@@ -123,5 +116,22 @@ const rows = hoursRows(HOURS);
     align-items: flex-start;
     gap: var(--stack-tight);
     margin-block-start: var(--stack-loose);
+  }
+
+  @media (min-width: 600px) {
+    /*
+     * The three actions sit on one line where they fit and wrap the join pill
+     * onto its own line where they do not — it is never crowded by a second
+     * action of the same weight.
+     */
+    .visit__actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .visit__actions :global(.btn) {
+      min-inline-size: 0;
+    }
   }
 </style>

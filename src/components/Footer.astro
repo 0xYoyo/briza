@@ -34,10 +34,12 @@ const socials: Social[] = (
 ).filter((s) => s.href !== "");
 ---
 
-<footer class="footer">
+<footer class="footer" data-shot="footer">
   <div class="footer__inner">
     <p class="footer__name">{STORE_NAME}</p>
+    <span class="footer__dot" aria-hidden="true">·</span>
     <p class="footer__meta"><Address /></p>
+    <span class="footer__dot" aria-hidden="true">·</span>
     <p class="footer__meta">
       <a class="footer__phone" href={callHref()}><bdi>{PHONE_DISPLAY}</bdi></a>
     </p>
@@ -60,15 +62,23 @@ const socials: Social[] = (
 </footer>
 
 <style>
-  /* Navy bookend (DESIGN §2.1); [hebrew-only] no Latin visible text */
+  /*
+   * Navy bookend (DESIGN §2.1); [hebrew-only] no Latin visible text.
+   * One compact row at =900px — name, address, phone, socials — and a stack
+   * below it. The dots are decorative and hidden from assistive tech.
+   */
   .footer {
     background: var(--surface-inverse);
     color: var(--text-on-inverse);
-    padding-block: var(--section-y);
+    padding-block: var(--space-10);
     padding-inline: var(--gutter);
   }
 
   .footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
     max-inline-size: var(--content-max);
     margin-inline: auto;
   }
@@ -83,7 +93,11 @@ const socials: Social[] = (
   }
 
   .footer__meta {
-    margin-block-start: var(--stack-tight);
+    color: var(--text-on-inverse-muted);
+  }
+
+  .footer__dot {
+    display: none;
     color: var(--text-on-inverse-muted);
   }
 
@@ -95,12 +109,12 @@ const socials: Social[] = (
   .footer__social {
     display: flex;
     gap: var(--space-3);
-    margin-block: var(--stack) 0;
+    margin-block: var(--space-2) 0;
     padding: 0;
     list-style: none;
   }
 
-  /* [tap-56] 56×56 hit area, 28px glyph, ice on navy */
+  /* [tap-56] 56x56 hit area, 28px glyph, ice on navy */
   .footer__social a {
     display: inline-flex;
     align-items: center;
@@ -121,8 +135,21 @@ const socials: Social[] = (
 
   @media (min-width: 900px) {
     .footer {
-      padding-block: var(--section-y-lg);
+      padding-block: var(--space-6);
       padding-inline: var(--gutter-wide);
+    }
+    .footer__inner {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .footer__dot {
+      display: inline;
+    }
+    .footer__social {
+      margin-block: 0;
+      margin-inline-start: auto;
     }
   }
 </style>

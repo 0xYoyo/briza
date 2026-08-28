@@ -3,3 +3,7 @@ dist/
 .astro/
 test-results/
 playwright-report/
+
+# local screenshot / probe scratch scripts
+.shoot.mjs
+.probe.mjs
