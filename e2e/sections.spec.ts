@@ -124,14 +124,12 @@ test("photo mosaic shape and image attributes (AC-7) [not-catalog]", async ({
 test("no two join pills can share a screen (AC-6) [one-cta]", async ({
   page,
 }) => {
-  const pills = await page
-    .locator("a.btn--primary")
-    .evaluateAll((els) =>
-      els.map((el) => {
-        const r = el.getBoundingClientRect();
-        return { top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
-      }),
-    );
+  const pills = await page.locator("a.btn--primary").evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return { top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
+    }),
+  );
   // hero, Offer, Visit — the three and only primary pills on the page
   expect(pills.length).toBe(3);
   const vh = await page.evaluate(() => window.innerHeight);
