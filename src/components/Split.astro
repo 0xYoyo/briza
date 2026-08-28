@@ -5,6 +5,11 @@
  * real reading column at `--measure-column`, vertically centred. Panels
  * alternate the photograph from side to side down the page. Below 900px the
  * panel stacks: photograph over text, the photograph still edge to edge.
+ *
+ * [one-viewport] at ≥900px the panel is exactly `--section-lock` tall: the
+ * photograph is clipped to that height by `object-fit: cover` inside an
+ * `overflow: hidden` column, so no frame runs past the panel's lower edge and
+ * the neighbouring section's ground never continues beside it at half width.
  */
 import { Image } from "astro:assets";
 import type { Photo } from "../photos";
@@ -13,11 +18,12 @@ type Props = {
   photo: Photo;
   /** Which side the photograph takes at ≥900px. Panels alternate. */
   side?: "start" | "end";
-  surface?: "page" | "sand";
-  /** `between` anchors the column's first and last block to the panel edges. */
-  align?: "center" | "between";
-  /** Panels that must clear a full viewport from the pill above them. */
-  tall?: boolean;
+  surface?: "page" | "sand" | "sand-deep";
+  /**
+   * `bottom` anchors the column to the panel's lower edge — the form a panel
+   * carrying a join pill takes, so [one-cta] holds inside one viewport.
+   */
+  align?: "center" | "bottom";
   /** Aspect ratio of the stacked photograph below 900px. */
   ratio?: string;
   /** Names the section in the DOM for screenshots and tests. */
@@ -29,7 +35,6 @@ const {
   side = "start",
   surface = "page",
   align = "center",
-  tall = false,
   ratio = "1 / 1",
   shot,
 } = Astro.props;
@@ -43,9 +48,13 @@ const SIZES = "(min-width: 900px) 50vw, 100vw";
     "panel",
     `panel--${side}`,
     `panel--${align}`,
-    { "panel--sand": surface === "sand", "panel--tall": tall },
+    {
+      "panel--sand": surface === "sand",
+      "panel--sand-deep": surface === "sand-deep",
+    },
   ]}
   data-shot={shot}
+  data-locked
   style={`--split-ratio: ${ratio}; --split-position: ${photo.position ?? "50% 50%"};`}
 >
   <div class="panel__photo">
@@ -72,15 +81,22 @@ const SIZES = "(min-width: 900px) 50vw, 100vw";
     display: grid;
     grid-template-rows: auto 1fr;
     background: var(--surface-page);
+    /* the photograph is clipped to the panel, never bled into its neighbour */
+    overflow: hidden;
   }
 
   .panel--sand {
     background: var(--surface-sand);
   }
 
+  .panel--sand-deep {
+    background: var(--surface-sand-deep);
+  }
+
   .panel__photo {
     position: relative;
     aspect-ratio: var(--split-ratio);
+    overflow: hidden;
     background: var(--surface-raised);
   }
 
@@ -103,11 +119,15 @@ const SIZES = "(min-width: 900px) 50vw, 100vw";
   }
 
   @media (min-width: 900px) {
+    /*
+     * [one-viewport] one viewport, never less: a shorter panel would leave
+     * the neighbouring section's ground beside a full-height photograph.
+     */
     .panel {
       grid-template-rows: 1fr;
       grid-template-columns: 1fr 1fr;
       align-items: stretch;
-      min-block-size: 84lvh;
+      min-block-size: var(--section-lock);
     }
 
     /* The alternating half. `order` is direction-agnostic ([logical-props]). */
@@ -115,40 +135,41 @@ const SIZES = "(min-width: 900px) 50vw, 100vw";
       order: 2;
     }
 
-    .panel--tall {
-      min-block-size: calc(var(--panel-min) + var(--cta-clearance));
-    }
-
     .panel__photo {
       aspect-ratio: auto;
       block-size: 100%;
+      min-block-size: 0;
     }
 
     .panel__text {
       align-items: center;
-      padding-block: var(--section-y-lg);
+      /* the pane's own padding can never sum past the locked height */
+      padding-block: var(--section-lock-pad);
       padding-inline: var(--pane-pad);
+      min-block-size: 0;
+      overflow: hidden;
     }
 
     /*
-     * A poster column: the heading group holds the top edge, the body and the
-     * action hold the bottom edge, and the panel's height is the space
-     * between them — not a void under a paragraph.
+     * A poster column: heading, sentence and pill read as one block held at
+     * the panel's lower edge, with the sand field open above them. The pill's
+     * inset from that edge is what [one-cta] is measured against.
      */
-    .panel--between .panel__text {
-      align-items: stretch;
-      /*
-       * The action holds the panel's lower edge: a shallower bottom padding
-       * both reads as deliberate and buys the clearance [one-cta] needs
-       * between this pill and the hero's.
-       */
-      padding-block: var(--section-y-lg) var(--space-10);
+    .panel--bottom .panel__text {
+      align-items: flex-end;
+      padding-block-end: var(--panel-cta-inset);
     }
-    .panel--between .panel__column {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: var(--space-12);
+  }
+
+  /*
+   * [one-viewport] and never more, on any screen tall enough to hold the
+   * column: `block-size` fixes the panel in both directions so the section
+   * below can never peek in under it. On a window shorter than the content
+   * the panel flows instead — a clipped heading is worse than a long page.
+   */
+  @media (min-width: 900px) and (min-height: 640px) {
+    .panel {
+      block-size: var(--section-lock);
     }
   }
 </style>

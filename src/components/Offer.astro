@@ -8,9 +8,8 @@ import Split from "./Split.astro";
 <Split
   photo={OFFER_PHOTO}
   side="start"
-  surface="sand"
-  align="between"
-  tall
+  surface="sand-deep"
+  align="bottom"
   ratio="4 / 5"
   shot="offer"
 >
@@ -23,14 +22,12 @@ import Split from "./Split.astro";
     <span class="offer__numeral"><bdi>10%</bdi></span>
     <span class="offer__rest">הנחה על הקנייה הראשונה</span>
   </h2>
-  <div class="offer__tail">
   <p class="offer__body">
     קבוצת הוואטסאפ של בריזה היא קבוצה שקטה — רק אירית כותבת בה, וכל סחורה חדשה מופיעה שם
     ראשונה. הצטרפו, ובקנייה הראשונה בחנות הראו בקופה שאתן בקבוצה ותקבלו <bdi>10%</bdi> הנחה.
   </p>
   <div class="offer__action">
     <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
-  </div>
   </div>
 </Split>
 
@@ -67,11 +64,5 @@ import Split from "./Split.astro";
   .offer__action {
     display: flex;
     margin-block-start: var(--stack-loose);
-  }
-
-  @media (min-width: 900px) {
-    .offer__body {
-      margin-block-start: 0;
-    }
   }
 </style>

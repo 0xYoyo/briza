@@ -146,8 +146,14 @@ import Button from "./Button.astro";
       inset-block-start: 46%;
     }
 
+    /*
+     * [one-cta] the hero and the Offer are one viewport each, so the only
+     * thing keeping their two green pills off one screen is where each sits
+     * inside its own section: the hero's pill clears the hero's lower edge by
+     * --hero-cta-inset, which is the Offer pill's own inset plus its height.
+     */
     .hero__content {
-      padding-block-end: var(--space-12);
+      padding-block-end: var(--hero-cta-inset);
       padding-inline: var(--gutter-wide);
     }
 

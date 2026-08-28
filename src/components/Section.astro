@@ -3,16 +3,22 @@
  * Page section (DESIGN §2.1): vertical rhythm by padding only — no borders,
  * dividers or angled edges between sections. Content is a single column at
  * `--content-max` with the page gutters; headings align start.
+ *
+ * [one-viewport] a `locked` section is exactly `--section-lock` tall at
+ * ≥900px with its content centred in that height and clipped to it, so the
+ * section below can never peek in under it.
  */
 type Props = {
-  surface?: "page" | "sand" | "inverse";
+  surface?: "page" | "sand" | "sand-deep" | "inverse";
   /** Section content runs to the viewport edge (the photo mosaic). */
   bleed?: boolean;
+  /** One viewport tall at ≥900px, content centred. */
+  locked?: boolean;
   /** Names the section in the DOM for screenshots and tests. */
   shot: string;
 };
 
-const { surface = "page", bleed = false, shot } = Astro.props;
+const { surface = "page", bleed = false, locked = false, shot } = Astro.props;
 ---
 
 <section
@@ -20,11 +26,14 @@ const { surface = "page", bleed = false, shot } = Astro.props;
     "section",
     {
       "section--sand": surface === "sand",
+      "section--sand-deep": surface === "sand-deep",
       "section--inverse": surface === "inverse",
       "section--bleed": bleed,
+      "section--locked": locked,
     },
   ]}
   data-shot={shot}
+  data-locked={locked ? "" : undefined}
 >
   <div class="section__inner">
     <slot />
@@ -44,6 +53,10 @@ const { surface = "page", bleed = false, shot } = Astro.props;
     background: var(--surface-sand);
   }
 
+  .section--sand-deep {
+    background: var(--surface-sand-deep);
+  }
+
   .section--inverse {
     background: var(--surface-inverse);
     color: var(--text-on-inverse);
@@ -54,6 +67,13 @@ const { surface = "page", bleed = false, shot } = Astro.props;
     padding-inline: 0;
   }
   .section--bleed .section__inner {
+    /*
+     * The heading sits on the grid rather than in the page's centred column:
+     * it starts at the gutter, inside the first mosaic column, and the grid
+     * runs from the same edge (DESIGN §2.7).
+     */
+    max-inline-size: none;
+    margin-inline: 0;
     padding-inline: var(--gutter);
   }
 
@@ -87,6 +107,29 @@ const { surface = "page", bleed = false, shot } = Astro.props;
     }
     .section--bleed .section__inner {
       padding-inline: var(--gutter-wide);
+    }
+
+    /* [one-viewport] one viewport, never less */
+    .section--locked {
+      min-block-size: var(--section-lock);
+      justify-content: center;
+      padding-block: var(--section-lock-pad);
+    }
+    .section--locked .section__inner {
+      flex: 0 1 auto;
+      min-block-size: 0;
+    }
+  }
+
+  /*
+   * [one-viewport] and never more, on any screen tall enough to hold the
+   * content. On a shorter window the section flows rather than clipping its
+   * own heading.
+   */
+  @media (min-width: 900px) and (min-height: 640px) {
+    .section--locked {
+      block-size: var(--section-lock);
+      overflow: hidden;
     }
   }
 </style>

@@ -71,7 +71,7 @@ test("photo mosaic shape and image attributes (AC-7) [not-catalog]", async ({
   const grid = page.locator("main ul").filter({ has: page.locator("img") });
   await expect(grid).toHaveCount(1);
   const imgs = grid.locator("img");
-  await expect(imgs).toHaveCount(7);
+  await expect(imgs).toHaveCount(4);
   const attrs = await imgs.evaluateAll((els) =>
     els.map((el) => ({
       alt: el.getAttribute("alt"),
@@ -96,24 +96,32 @@ test("photo mosaic shape and image attributes (AC-7) [not-catalog]", async ({
       li.getBoundingClientRect(),
     );
     const unit = Math.min(...cells.map((c) => c.height));
+    const single = cells.find((c) => c.height === unit);
     return {
       columns: cs.gridTemplateColumns.trim().split(/\s+/).length,
       rows: cs.gridTemplateRows.trim().split(/\s+/).length,
-      // frames taller than one row: the two hand shots spanning two rows
+      // frames taller than one row: the two that span two rows
       tall: cells.filter((c) => c.height > unit * 1.5).length,
       widths: new Set(cells.map((c) => Math.round(c.width))).size,
+      // one seam width everywhere: column and row gaps are the same value
+      gaps: new Set([cs.columnGap, cs.rowGap]).size,
+      cellRatio: single ? single.width / single.height : 0,
       bleed: Math.round(el.getBoundingClientRect().width),
       viewport: window.innerWidth,
     };
   });
   const mobile = testInfo.project.name === "mobile";
   expect(shape.columns).toBe(mobile ? 2 : 3);
-  expect(shape.rows).toBe(mobile ? 5 : 3);
+  expect(shape.rows).toBe(mobile ? 3 : 2);
+  // two frames run two rows tall; the rest are single 4:5 cells
   expect(shape.tall).toBe(2);
-  // a mosaic, not a uniform grid: on phones one frame also runs two columns
-  expect(shape.widths).toBe(mobile ? 2 : 1);
+  // one tile shape: every cell is the same width, on an even seam
+  expect(shape.widths).toBe(1);
   // full-bleed: the mosaic runs to the viewport edge
   expect(shape.bleed).toBe(shape.viewport);
+  // uniform 4:5 cells (the tall ones are two of those plus a seam)
+  expect(shape.cellRatio).toBeCloseTo(0.8, 1);
+  expect(shape.gaps).toBe(1);
 });
 
 /*
@@ -220,7 +228,119 @@ test("image transfer for the whole page is ≤ 1 MB (AC-8)", async ({
   await page.waitForLoadState("networkidle");
   await context.close();
   const bytes = Array.from(sizes.values()).reduce((a, b) => a + b, 0);
-  // hero + four panel photos + three step crops + seven mosaic frames
-  expect(sizes.size).toBe(14);
+  // the eleven launch photographs, each rendered exactly once
+  expect(sizes.size).toBe(11);
   expect(bytes).toBeLessThanOrEqual(1_000_000);
+});
+
+/*
+ * [one-viewport] every major section is exactly one viewport tall at ≥900px.
+ * Taller and the next section peeks in under it; shorter and its neighbour's
+ * ground continues beside a full-height photograph at half width.
+ */
+test("every major section is exactly one viewport tall [one-viewport]", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "the lock is a ≥900px rule");
+  const vh = await page.evaluate(() => window.innerHeight);
+  const sections = await page
+    .locator("[data-locked], .hero")
+    .evaluateAll((els) =>
+      els.map((el) => ({
+        shot: el.getAttribute("data-shot"),
+        height: el.getBoundingClientRect().height,
+      })),
+    );
+  expect(sections.map((s) => s.shot)).toEqual([
+    "hero",
+    "offer",
+    "howitworks",
+    "story",
+    "visit",
+  ]);
+  for (const section of sections) {
+    expect(section.height, `${section.shot} height`).toBeCloseTo(vh, 0);
+  }
+});
+
+/*
+ * No section may bleed into, or fall short of, its neighbour: the sections
+ * tile the document exactly, so no boundary shows a strip of the previous
+ * section's ground and nothing overlaps the section below it.
+ */
+test("sections tile the page with no gap and no overlap [one-viewport]", async ({
+  page,
+}) => {
+  const boxes = await page.locator("[data-shot]").evaluateAll((els) =>
+    els.map((el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        shot: el.getAttribute("data-shot"),
+        top: r.top + window.scrollY,
+        bottom: r.bottom + window.scrollY,
+      };
+    }),
+  );
+  expect(boxes[0].top).toBe(0);
+  for (let i = 1; i < boxes.length; i++) {
+    expect(
+      boxes[i].top - boxes[i - 1].bottom,
+      `${boxes[i].shot} starts flush under ${boxes[i - 1].shot}`,
+    ).toBeCloseTo(0, 0);
+  }
+  const docHeight = await page.evaluate(
+    () => document.documentElement.scrollHeight,
+  );
+  // the last section ends the document (the phone reserves the sticky bar)
+  expect(docHeight - boxes[boxes.length - 1].bottom).toBeLessThanOrEqual(96);
+});
+
+/*
+ * Nothing overflows a locked section: a photograph is clipped by its own
+ * column and a heading is never cut by the section's edge.
+ */
+test("no locked section overflows its own box [one-viewport]", async ({
+  page,
+}, testInfo) => {
+  test.skip(testInfo.project.name === "mobile", "the lock is a ≥900px rule");
+  const overflow = await page.locator("[data-locked]").evaluateAll((els) =>
+    els.flatMap((el) => {
+      const box = el.getBoundingClientRect();
+      return Array.from(el.querySelectorAll("h2, p, img, a, table")).flatMap(
+        (child) => {
+          const r = child.getBoundingClientRect();
+          if (r.height === 0) return [];
+          const over = Math.max(box.top - r.top, r.bottom - box.bottom);
+          return over > 1
+            ? [
+                {
+                  shot: el.getAttribute("data-shot"),
+                  tag: child.tagName,
+                  over: Math.round(over),
+                },
+              ]
+            : [];
+        },
+      );
+    }),
+  );
+  expect(overflow).toEqual([]);
+});
+
+/*
+ * [photo-used-once] every photograph is cast into exactly one role, so a
+ * reader never meets the same picture twice on the way down the page.
+ */
+test("no photograph appears twice on the page [photo-used-once]", async ({
+  page,
+}) => {
+  const files = await page.locator("img").evaluateAll((els) =>
+    els.map((el) => {
+      const src = el.getAttribute("src") ?? "";
+      // /_astro/<name>.<content hash>_<variant hash>.webp
+      return (src.split("/").pop() ?? "").split(".")[0];
+    }),
+  );
+  expect(files.length).toBe(11);
+  expect(new Set(files).size).toBe(files.length);
 });

@@ -18,11 +18,11 @@ describe("Photos component", () => {
       props: { photos: PHOTOS },
     });
     expect(html).toContain("מהמדפים שלנו");
-    expect(html.match(/<img/g)?.length).toBe(7);
+    expect(html.match(/<img/g)?.length).toBe(4);
     expect(html).toContain('loading="lazy"');
     expect(html).not.toContain("<a ");
     // every mosaic cell is placed by index, so each one must carry its class
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 4; i++) {
       expect(html).toContain(`mosaic__cell--${i}`);
     }
   });
