@@ -38,6 +38,12 @@
   /* Color roles (DESIGN §2.2) */
   --surface-page: var(--cream-50);
   --surface-sand: var(--cream-200);
+  /*
+   * The deepest reading surface. Three warm steps (page / sand / sand-deep)
+   * give the page a rhythm in which no two adjacent sections share a ground
+   * and none of them reads as plain white (DESIGN §2.1).
+   */
+  --surface-sand-deep: var(--sand-300);
   --surface-raised: var(--cream-100);
   --surface-inverse: var(--navy-900);
   --surface-inverse-2: var(--navy-800);
@@ -121,13 +127,22 @@
   --stack-loose: var(--space-8);
   --content-max: 1100px;
   /*
-   * Split panels: half photograph, half text (DESIGN §2.1). The panel is
-   * sized from the LARGE viewport so a collapsing mobile URL bar can never
-   * pull two join pills onto one screen; --cta-clearance is the slack that
-   * keeps the Offer pill strictly below the hero pill + one viewport.
+   * [one-viewport] every major section is exactly one small viewport tall at
+   * ≥900px — never taller (the next section would peek in under it) and never
+   * shorter (its neighbour's ground would continue beside a full-height
+   * photograph). Its content is centred in that height and clipped to it.
    */
-  --panel-min: 100lvh;
-  --cta-clearance: var(--space-20);
+  --section-lock: 100svh;
+  /* padding inside a locked section: it can never add up past the lock */
+  --section-lock-pad: clamp(40px, 7vh, 96px);
+  /*
+   * [one-cta] the hero's pill sits this far above the hero's lower edge — the
+   * offer pill's own bottom inset plus the pill height, so the two can never
+   * appear on one screen even though the two sections are exactly one
+   * viewport each. See DESIGN §2.1.
+   */
+  --hero-cta-inset: 112px;
+  --panel-cta-inset: var(--space-10);
   --pane-pad: clamp(32px, 5vw, 88px);
   /* Mosaic (DESIGN §2.7): tight seams, full-bleed */
   --mosaic-gap: 8px;

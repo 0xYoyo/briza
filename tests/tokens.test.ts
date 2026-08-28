@@ -36,7 +36,10 @@ const EXPECTED: Record<string, string> = {
   "--radius-md": "12px",
   "--radius-lg": "20px",
   "--mosaic-gap": "8px",
-  "--panel-min": "100lvh",
+  "--surface-sand-deep": "var(--sand-300)",
+  "--sand-300": "#e0cdae",
+  "--section-lock": "100svh",
+  "--panel-cta-inset": "var(--space-10)",
   "--press-scale": "0.985",
   "--space-1": "4px",
   "--space-2": "8px",
@@ -82,6 +85,23 @@ describe("design tokens", () => {
     expect(ceiling("--text-story-body")).toBeLessThan(38);
     expect(floor("--text-story-title")).toBe(38);
     expect(ceiling("--text-story-title")).toBe(54);
+  });
+
+  /*
+   * [one-cta] the hero and the Offer are one viewport each, so the two green
+   * pills stay off one screen only because of where each sits inside its own
+   * section: the hero's pill clears the hero's lower edge by at least the
+   * Offer pill's own inset plus the pill's height. The e2e suite measures the
+   * rendered result; this keeps the two tokens from drifting apart silently.
+   */
+  it("keeps the hero pill one viewport clear of the Offer pill [one-cta]", () => {
+    const px = (token: string) =>
+      Number.parseFloat(tokenValue(token).replace("px", ""));
+    const panelInset = px("--space-10");
+    expect(tokenValue("--panel-cta-inset")).toBe("var(--space-10)");
+    expect(px("--hero-cta-inset")).toBeGreaterThanOrEqual(
+      panelInset + px("--tap-lg"),
+    );
   });
 
   it("defines the glow and scrim", () => {

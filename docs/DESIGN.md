@@ -1,10 +1,14 @@
 # Briza — Design
 
-Version: 2 · Date: 2026-08-27 · Rewritten in the founder-directed makeover PR
-to match what the page now is. v1 (same date) was authored by /yoyo-design
-from `docs/PRD.md` v2, the repository and the Claude Design kit at
-`design/kit/` (tokens only); its palette, type and floors survive unchanged.
-What changed is layout, and the invariants that described the old layout.
+Version: 2.1 · Date: 2026-08-28 · v2 (2026-08-27) was rewritten in the
+founder-directed makeover PR to match what the page then was; v2.1 is the
+founder-directed polish pass, which refines three of its rules — section
+sizing ([one-viewport]), surface alternation and photo casting
+([photo-used-once]) — and strikes the fixed-distance form of [one-cta]. v1
+(2026-08-27) was authored by /yoyo-design from `docs/PRD.md` v2, the
+repository and the Claude Design kit at `design/kit/` (tokens only); its
+palette, type and floors survive all three versions unchanged. What has
+changed each time is layout, and the invariants that described it.
 
 This file is the design bar. `/yoyo-review` judges `[DESIGN]` findings
 against it: a must-fix cites an invariant by its bracketed name. It holds
@@ -36,6 +40,22 @@ unchanged, because none of them was the problem.
 | [wordmark-once] — crop the sign away, the text wordmark wins | **inverted** to [wordmark-is-photo] | The hero hid the one thing the shoot captured and then re-typed the name beside it. |
 | [one-cta] — primary pills ≥1 viewport-height apart | **restated** as "never two green pills visible at once" | The distance rule forced a viewport-tall empty Offer. The reader's screen is the real constraint. |
 | [no-auto-motion] — nothing may animate without input | **narrowed** to [motion-on-entry] | One progressive-enhancement reveal is allowed; everything else still may not move. |
+
+### What v2.1 changed, and why
+
+The v2 page was right in kind and loose in composition: panels were sized by
+`min-block-size` alone, so each one ran a little past the screen and the next
+section peeked in under it, a full-height photograph left its neighbour's
+ground continuing beside it at half width, three of the surfaces sat on
+near-white, and three photographs were used twice.
+
+| v2 rule | v2.1 | Why |
+|---|---|---|
+| "Sections are sized by their content, never padded out to a viewport" | **struck** for the five major sections — [one-viewport] | Content-sized panels are what made every boundary look broken. The mosaic, reviews and footer keep the old rule. |
+| the Offer panel is sized from `lvh` plus `--cta-clearance` | **replaced** — both sections are one viewport and [one-cta] is held by where each pill sits inside its own section | A panel taller than the screen was the spill; the clearance is now `--hero-cta-inset` vs `--panel-cta-inset`. |
+| `--surface-sand` lifts the Offer and Visit panels, cream is everything else | **narrowed** — three warm steps, no two adjacent sections alike | Cream on cream on cream read as a document; the ground now changes at every boundary. |
+| "A photograph may carry a panel and appear in the mosaic" | **struck** — [photo-used-once] | A reader who has already seen a frame reads its second appearance as the page running out of material. |
+| the mosaic is 2x5 / 3x3 with mixed cell shapes | **restated** — uniform 4:5 cells, two two-row frames | Mixed shapes and a floating heading read as a spreadsheet with a caption. |
 
 ---
 
@@ -105,14 +125,35 @@ diff. Cite by bracketed name.
 
 - **[one-cta]** No two WhatsApp-green pills may be visible in the same
   viewport at any scroll position, at any viewport height. This is a rule
-  about the reader's screen, not a fixed distance: panels carrying a join
-  pill are sized from the LARGE viewport (`lvh`) plus `--cta-clearance`, so
-  a collapsing mobile URL bar cannot pull two of them together. Primary
-  pills are never side by side and never in the sticky bar. A section is
-  never padded out past its content for any other reason.
+  about the reader's screen, not a fixed distance. Since the hero and the
+  Offer are one viewport each ([one-viewport]), the rule is held by where
+  each pill sits inside its own section: the hero's pill clears the hero's
+  lower edge by `--hero-cta-inset`, which is at least the Offer pill's own
+  inset (`--panel-cta-inset`) plus the pill's height, so the gap between
+  them is never less than one screen. Primary pills are never side by side
+  and never in the sticky bar.
 - **[green-is-join]** WhatsApp green (`--whatsapp-*`) appears only on the
   "join the updates group" button. "Write to Irit", "call", "navigate" and
   the review pills are never green, even though two of them open WhatsApp.
+- **[one-viewport]** At ≥900px every major section — hero, Offer, How it
+  works, Story, Visit — is exactly one small viewport tall (`--section-lock`,
+  100svh): never taller, so the next section can never peek in under it, and
+  never shorter, so a neighbour's ground can never continue beside a
+  full-height photograph at half width. Its content is centred in that height
+  (the Offer's column is held at the panel's lower edge instead, which is
+  what [one-cta] is measured against) and clipped to it: a panel photograph
+  is `object-fit: cover` inside an `overflow: hidden` column. Nothing may
+  overflow a locked section — no heading is ever cut at any scroll position.
+  The photo mosaic, the reviews band and the footer are exempt and are sized
+  by their content, but they still start flush: no section ever leaves a
+  strip of its own ground above the one below it. On a window shorter than
+  640px the sections flow at their content height instead — a clipped
+  heading is worse than a long page.
+- **[photo-used-once]** Every photograph in `src/photos.ts` is cast into
+  exactly one role. No file appears twice on the page in any crop: not a
+  panel and the mosaic, not a step and the mosaic. If the page needs more
+  frames than the shoot has, the answer is another shoot, not a second crop
+  of a picture the reader has already passed.
 - **[sticky-secondary]** The mobile sticky bar carries only the secondary
   "write to Irit" action and the call icon; it never contains the join
   button, never grows past 80px tall, and is hidden at ≥900px. The hero
@@ -206,12 +247,22 @@ are not adopted.
   navy), the reviews band on `--surface-inverse-2` (navy-800) and the footer
   on `--surface-inverse` (navy-900). The two adjacent inverse blocks
   separate by their own step in value, never by a divider.
-- Cream (`--surface-page`) is the default reading surface; `--surface-sand`
-  lifts the Offer and Visit panels. No section is white (`--white`); white is
-  reserved for the sticky bar's glass tint and button text.
+- **Three warm steps, alternating.** `--surface-sand-deep` (sand-300),
+  `--surface-sand` (cream-200) and `--surface-page` (cream-50) are used so
+  that **no two adjacent sections share a ground** and no section reads as
+  plain white: Offer sand-deep, How it works sand, Story cream with its
+  reading column on a sand block, mosaic sand, Visit sand-deep, then the two
+  inverse blocks. `--surface-raised` (cream-100) stays an object surface —
+  the hours table, image placeholders — not a section ground. No section is
+  white (`--white`); white is reserved for the sticky bar's glass tint and
+  button text.
+- The Story is the one section on the page cream, and it carries a
+  `--surface-sand` block behind its reading column: a field, not a card —
+  square corners, no border, no shadow ([no-icon-card]).
 - Sections are separated by vertical rhythm (`--section-y` 64px on phones,
-  `--section-y-lg` 96px at ≥900px) or by a panel's own edge, never by
-  borders, dividers or angled edges. A hairline (`--border-hairline`, 1px) is
+  `--section-y-lg` 96px at ≥900px), by a locked section's own edge
+  ([one-viewport]) or by a change of ground, never by borders, dividers or
+  angled edges. A hairline (`--border-hairline`, 1px) is
   used only inside the hours table and above the sticky bar.
 - Panel columns hold `--measure-column` 56ch and sit inside `--pane-pad`
   (32→88px). Full-width sections keep `--content-max` 1100px with `--gutter`
@@ -225,8 +276,9 @@ are not adopted.
 | Role | Token | Hex | Rule |
 |---|---|---|---|
 | Page surface | `--surface-page` | `#FDFAF5` | default section background |
-| Lifted surface | `--surface-sand` | `#EFE5D3` | Offer and Visit panels |
-| Placeholder | `--surface-raised` | `#F7F1E6` | image placeholders, hours table |
+| Lifted surface | `--surface-sand` | `#EFE5D3` | How it works, mosaic, Story's text block |
+| Deep surface | `--surface-sand-deep` | `#E0CDAE` | Offer and Visit panels |
+| Placeholder | `--surface-raised` | `#F7F1E6` | image placeholders, hours table — never a section ground |
 | Inverse surface | `--surface-inverse` | `#0B1020` | hero ground, footer |
 | Inverse surface 2 | `--surface-inverse-2` | `#131B31` | reviews band |
 | Body text | `--text-body` | `#1A1A1A` | all running text on cream |
@@ -330,9 +382,9 @@ CSS transitions plus one IntersectionObserver ([motion-on-entry]).
 - **Split panel.** Photograph (full-bleed, `object-fit: cover`, its crop
   named per role in `src/photos.ts`) beside a reading column; sides
   alternate by `order`; stacked below 900px at a per-panel aspect ratio.
-  A panel that carries a join pill anchors its heading to the panel's top
-  edge and its body + pill to the bottom, so the height [one-cta] requires
-  reads as a poster rather than as a void.
+  A panel that carries a join pill holds its whole column — heading, sentence
+  and pill — at the panel's lower edge, so the open field above it reads as a
+  poster rather than as a void between two blocks.
 - **Buttons.** Pills, `--tap-lg` 64px tall for the primary, `--tap-min`
   56px for secondary and quiet; full width on phones, intrinsic width
   ≥ 200px at ≥600px, shrinking to content where three actions share a row.
@@ -350,11 +402,16 @@ CSS transitions plus one IntersectionObserver ([motion-on-entry]).
   line is absolutely positioned in the gap above the table in
   `--text-accent`, so the table sits at the same place with or without
   JavaScript.
-- **Photo mosaic.** Full-bleed, `--mosaic-gap` seams, cells placed by hand:
-  2 columns × 5 rows below 900px with one frame two columns wide, 3 × 3 at
-  ≥900px; the two hand-holding-an-item frames span two rows at both
-  breakpoints. Row height comes from the container's aspect ratio.
-  [not-catalog] no caption, link, hover state or overlay per frame.
+- **Photo mosaic.** Full-bleed, one `--mosaic-gap` seam everywhere, cells
+  placed by hand: 2 columns × 3 rows below 900px, 3 × 2 at ≥900px. Every cell
+  is the same upright 4:5 frame; exactly two of them run two rows tall, at
+  fixed positions (the outer columns at ≥900px, opposite columns offset by a
+  row on phones), and those two are always frames whose subject survives a
+  two-row crop. Row height comes from the container's aspect ratio. The
+  heading sits on the grid — inside the first column's inline edge, one
+  `--space-12` above the first row — not in the page's centred column.
+  Each frame names its own `object-position` so no cell decapitates a
+  garment. [not-catalog] no caption, link, hover state or overlay per frame.
 - **Links** (map, phone): `--link` blue-700, underlined, offset 3px,
   thickness 1.5px; never styled as buttons except the named review /
   navigate / call actions.
@@ -383,6 +440,8 @@ offer, three steps, story, visit) and the mosaic list, each with Hebrew alt
 text and the `object-position` its crop needs. Warm-lit, clothes-forward,
 hands allowed, faces never. No filters, no duotone, no overlays other than
 the hero scrim. Files are never pre-cropped to the layout: a role's crop is
-CSS, so swapping a file is a one-line change (PRD §10.5). A photograph may
-carry a panel and appear in the mosaic; when it does, the two crops must not
-read as the same picture twice.
+CSS, so swapping a file is a one-line change (PRD §10.5). [photo-used-once] a file
+carries exactly one role: a photograph that carries a panel or a step is
+never also in the mosaic, in any crop. A full-bleed panel needs a frame with
+depth and colour across it — a flat single-garment product shot cannot carry
+one, and belongs in a step column or a mosaic cell.

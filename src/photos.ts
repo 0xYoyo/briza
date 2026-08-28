@@ -32,14 +32,25 @@ export const HERO_PHOTO: Photo = {
   position: "50% 0%",
 };
 
-/** Offer panel — the hand holding the green cat tee. */
+/**
+ * Offer panel — the interior rack: black-and-white tops running into red
+ * plaid and a rainbow-print row under the wood shelf. A full-bleed panel needs
+ * a frame with depth and colour across it; a single garment on a hanger is a
+ * product shot and cannot carry one.
+ */
 export const OFFER_PHOTO: Photo = {
-  src: p10,
-  alt: "יד מחזיקה קולב עם חולצת טי ירוקה ועליה הדפס חתול פרחוני, על רקע מוט תלייה עמוס בבגדים",
-  position: "50% 30%",
+  src: p06,
+  alt: "מוט תלייה מתחת למדף עץ עם חולצות שחורות בפסי לבן, חולצות משבצות אדומות וחולצות צבעוניות",
+  // the wood shelf stays in the top of the crop, the colour run fills the rest
+  position: "50% 42%",
 };
 
-/** How it works — one 4:3 crop per step, in step order. */
+/**
+ * How it works — one 4:3 crop per step, in step order. Step 2 is the green cat
+ * tee: a flat product shot cannot carry a full-bleed panel, but at 4:3 inside
+ * a step column it is exactly the "I saw something, save it for me" picture,
+ * and it is the one place the tee appears ([photo-used-once]).
+ */
 export const STEP_PHOTOS: readonly Photo[] = [
   {
     src: p07,
@@ -47,9 +58,9 @@ export const STEP_PHOTOS: readonly Photo[] = [
     position: "50% 45%",
   },
   {
-    src: p05,
-    alt: "יד מחזיקה קולב אדום עם חולצה שחורה ועליה הדפס של שלוש דמויות נשים בכובעים",
-    position: "50% 22%",
+    src: p10,
+    alt: "יד מחזיקה קולב עם חולצת טי ירוקה ועליה הדפס חתול פרחוני, על רקע מוט תלייה עמוס בבגדים",
+    position: "50% 30%",
   },
   {
     src: p03,
@@ -77,39 +88,38 @@ export const VISIT_PHOTO: Photo = {
 };
 
 /**
- * The mosaic (PRD §3.1, 6–10 launch photos), filename order. Photos carrying
- * a section panel above — 04 (Story) and 07 (How it works) — are not repeated
- * here. `02-window-display-mannequins.jpg` carries the Visit panel, where the
- * mall corridor is the point; below the hero the mosaic is clothes and hands
- * only ([photos-of-clothes]).
+ * The mosaic. Every photograph on the page is used exactly once
+ * ([photo-used-once]): the hero, the Offer panel, the three how-it-works steps,
+ * the Story and the Visit panel take seven of the eleven launch files, so the
+ * mosaic is the remaining four. Four frames on a 3x2 grid at ≥900px (2x3 on
+ * phones): the first two run two rows tall in the outer columns and are the
+ * two upright frames that survive that crop, the last two are single cells
+ * between them. `position` names the crop each frame needs so no cell
+ * decapitates a garment.
  */
 export const PHOTOS: readonly Photo[] = [
   {
-    src: p03,
-    alt: "מתלה ברזל בתוך החנות עם חולצות שחורות, ומאחוריו מוטות תלייה עמוסים בבגדים",
+    src: p09,
+    alt: "שקית נייר ורודה של בריזה תלויה על מתלה ברזל מול חולצה שחורה, מעליה מדף עץ עם עציץ וחולצות משבצות מקופלות",
+    // a two-row frame: the shelf, the plant, the bag and the black top
+    position: "50% 45%",
   },
   {
     src: p05,
     alt: "יד מחזיקה קולב אדום עם חולצה שחורה ועליה הדפס של שלוש דמויות נשים בכובעים",
-  },
-  {
-    src: p06,
-    alt: "מוט תלייה מתחת למדף עץ עם חולצות שחורות בפסי לבן, חולצות משבצות אדומות וחולצות צבעוניות",
+    // a two-row frame: the whole top, hem to hanger, inside the tall cell
+    position: "50% 38%",
   },
   {
     src: p08,
     alt: "שקית נייר ורודה עם הכיתוב בריזה גן העיר, חולצה ירוקה עם הדפס חתול פרחוני וחולצת משבצות אדומה מקופלת",
-  },
-  {
-    src: p09,
-    alt: "שקית נייר ורודה של בריזה תלויה על מתלה ברזל מול חולצה שחורה, מעליה מדף עץ עם עציץ וחולצות משבצות מקופלות",
-  },
-  {
-    src: p10,
-    alt: "יד מחזיקה קולב עם חולצת טי ירוקה ועליה הדפס חתול פרחוני, על רקע מוט תלייה עמוס בבגדים",
+    // one upright cell: the bag and the folded plaid, ceiling cropped away
+    position: "50% 66%",
   },
   {
     src: p11,
     alt: "שלוש חולצות מקופלות בירוק, צהוב ותכלת עם הדפס פרחוני, לצד שקית נייר אדומה של גן העיר",
+    // a landscape frame in an upright cell: hold the folded stack and the bag
+    position: "66% 62%",
   },
 ];

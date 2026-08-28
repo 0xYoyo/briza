@@ -5,15 +5,28 @@ import Split from "./Split.astro";
 ---
 
 <Split photo={STORY_PHOTO} side="end" ratio="4 / 5" shot="story">
-  <h2 class="story__title">{STORE_NAME}</h2>
-  <p class="story__body">
+  <div class="story__block">
+    <h2 class="story__title">{STORE_NAME}</h2>
+    <p class="story__body">
     את בריזה פתח אבא של אירית, דוריאן, לפני כארבעים שנה. היום אירית מנהלת אותה בעצמה: בוחרת כל
     פריט ביד, מזמינה בכמויות קטנות, ועונה לכן בעצמה בוואטסאפ. בלי מותגים גדולים ובלי אופנה מהירה —
     בגדים יפים שנוח ללבוש, במחירים שמתחילים ב־<bdi>₪79</bdi>. אצלנו לא ממהרים.
-  </p>
+    </p>
+  </div>
 </Split>
 
 <style>
+  /*
+   * The Story is the one section whose ground is the page cream, so its
+   * reading column sits on a sand block — a field behind the text rather than
+   * a card: square-cornered, no border, no shadow ([no-icon-card]). It is what
+   * keeps the section from reading as a document page (DESIGN §2.1).
+   */
+  .story__block {
+    padding: var(--space-8) var(--space-6);
+    background: var(--surface-sand);
+  }
+
   /*
    * [story-owns-38-54] the 38–54px band is the Story title's alone; every
    * other display step on the page sits above or below it.
@@ -37,5 +50,11 @@ import Split from "./Split.astro";
     font-family: var(--font-quote);
     font-size: var(--text-story-body);
     line-height: var(--leading-body);
+  }
+
+  @media (min-width: 900px) {
+    .story__block {
+      padding: var(--space-12) var(--space-10);
+    }
   }
 </style>
