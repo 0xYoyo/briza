@@ -149,6 +149,18 @@
     rgba(11, 16, 32, 0.72) 38%,
     rgba(11, 16, 32, 0) 100%
   );
+  /*
+   * The hero carries text over a lit shop interior, the brightest ground on
+   * the page, so its scrim is deeper than the generic one: at the eyebrow's
+   * height the ground is ~0.72 navy, which keeps ice-300 above 4.5:1
+   * ([contrast-aa]).
+   */
+  --scrim-hero: linear-gradient(
+    to top,
+    rgba(11, 16, 32, 0.95) 0%,
+    rgba(11, 16, 32, 0.8) 35%,
+    rgba(11, 16, 32, 0) 100%
+  );
   --scrim-flat: rgba(11, 16, 32, 0.55);
   --blur-glass: saturate(120%) blur(10px);
 

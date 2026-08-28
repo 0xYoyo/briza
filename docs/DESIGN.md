@@ -239,7 +239,7 @@ are not adopted.
 | Review pill | `--ice-200` | `#D5E9F6` | review pills on the inverse band |
 | Focus | `--focus-ring` | `#4E93C2` | focus outline |
 | Hairline | `--border-hairline` | `#CFC9C0` | table rules, sticky-bar edge |
-| Wood | `--wood-500/600` | `#C79A63` / `#A87C48` | decorative rules only |
+| Wood | `--wood-500` | `#C79A63` | the hours-table head rule, nothing else |
 
 - **Contrast-corrected roles (deviations from the kit):**
   - The primary button text is `--navy-900` on `--whatsapp-500` (9.4:1).
@@ -250,9 +250,8 @@ are not adopted.
   - `--stone-500` (`#7A7570`, 4.4:1 on cream) is never used for text; it
     may tint decorative rules only. The lightest text on cream is
     `--stone-700`.
-  - Wood is never a text colour (3.6:1 on cream) and never a surface; it
-    appears only as a 2px rule under section eyebrows and the hours-table
-    head.
+  - Wood is never a text colour (3.6:1 on cream) and never a surface; its
+    one appearance is the 2px rule under the hours-table head.
 - Exactly one accent hue for text per surface: blue-700 on cream, ice on
   navy. Coral and lemon (`--coral-600`, `--lemon-300`) are not used in UI;
   they exist in the photos.
@@ -308,8 +307,9 @@ is reserved ([story-owns-38-54]):
 - Elevation is warm and quiet: `--shadow-card` is not used (there are no
   cards); the only shadow is `--shadow-float` on the sticky bar. Shadows are
   never blue-grey.
-- Text over photography sits on `--scrim-bottom` (navy gradient 92%→0%)
-  covering the lower third of the frame and landing on the navy ground;
+- Text over photography sits on a navy scrim covering the lower third of the
+  frame and landing on the navy ground — `--scrim-hero` (95%→0%) where the
+  ground is the lit interior, `--scrim-bottom` (92%→0%) otherwise;
   never on a flat darkened photo, never with a text-shadow as the only
   protection.
 
