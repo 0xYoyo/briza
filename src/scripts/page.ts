@@ -29,7 +29,10 @@ if (reveals.length > 0 && wantsMotion && "IntersectionObserver" in window) {
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+        // reveal on entry, and also for anything the reader has already
+        // scrolled past — a restored scroll position must never leave a
+        // block invisible.
+        if (!entry.isIntersecting && entry.boundingClientRect.top > 0) continue;
         entry.target.classList.add("is-in");
         observer.unobserve(entry.target);
       }

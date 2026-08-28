@@ -27,6 +27,7 @@ const EXPECTED: Record<string, string> = {
   "--content-max": "1100px",
   "--measure-wide": "52ch",
   "--measure-prose": "34ch",
+  "--measure-column": "56ch",
   "--gutter": "20px",
   "--gutter-wide": "40px",
   "--tap-min": "56px",
@@ -34,6 +35,8 @@ const EXPECTED: Record<string, string> = {
   "--radius-pill": "999px",
   "--radius-md": "12px",
   "--radius-lg": "20px",
+  "--mosaic-gap": "8px",
+  "--panel-min": "100lvh",
   "--press-scale": "0.985",
   "--space-1": "4px",
   "--space-2": "8px",
@@ -47,8 +50,10 @@ const EXPECTED: Record<string, string> = {
   "--space-16": "64px",
   "--space-20": "80px",
   "--space-24": "96px",
-  "--text-hero": "clamp(40px, 11vw, 72px)",
-  "--text-h1": "clamp(32px, 7.5vw, 48px)",
+  "--text-numeral": "clamp(60px, 15vw, 112px)",
+  "--text-story-title": "clamp(38px, 5.4vw, 54px)",
+  "--text-hero-line": "clamp(22px, 3.4vw, 34px)",
+  "--text-story-body": "clamp(21px, 1.7vw, 24px)",
   "--text-h2": "clamp(26px, 6vw, 34px)",
   "--text-h3": "22px",
   "--text-lead": "clamp(20px, 4.8vw, 24px)",
@@ -58,6 +63,25 @@ const EXPECTED: Record<string, string> = {
 describe("design tokens", () => {
   it.each(Object.entries(EXPECTED))("%s is %s", (name, value) => {
     expect(tokenValue(name)).toBe(value);
+  });
+
+  /*
+   * [story-owns-38-54] the 38-54px band belongs to the Story title alone.
+   * The display steps either side of it must clear the band at every
+   * viewport width, so the numeral's floor is above 54 and every heading's
+   * ceiling is below 38.
+   */
+  it("keeps every other display step clear of the 38-54px band", () => {
+    const floor = (token: string) =>
+      Number.parseFloat(tokenValue(token).replace(/^clamp\(\s*/, ""));
+    const ceiling = (token: string) =>
+      Number.parseFloat(tokenValue(token).split(",").pop()?.trim() ?? "");
+    expect(floor("--text-numeral")).toBeGreaterThan(54);
+    expect(ceiling("--text-h2")).toBeLessThan(38);
+    expect(ceiling("--text-hero-line")).toBeLessThan(38);
+    expect(ceiling("--text-story-body")).toBeLessThan(38);
+    expect(floor("--text-story-title")).toBe(38);
+    expect(ceiling("--text-story-title")).toBe(54);
   });
 
   it("defines the glow and scrim", () => {

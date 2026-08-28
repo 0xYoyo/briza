@@ -65,13 +65,13 @@ test("the story paragraph is set in Frank Ruhl Libre (AC-7)", async ({
   expect(family.startsWith('"Frank Ruhl Libre"')).toBe(true);
 });
 
-test("photos grid shape and image attributes (AC-7) [not-catalog]", async ({
+test("photo mosaic shape and image attributes (AC-7) [not-catalog]", async ({
   page,
 }, testInfo) => {
   const grid = page.locator("main ul").filter({ has: page.locator("img") });
   await expect(grid).toHaveCount(1);
   const imgs = grid.locator("img");
-  await expect(imgs).toHaveCount(9);
+  await expect(imgs).toHaveCount(7);
   const attrs = await imgs.evaluateAll((els) =>
     els.map((el) => ({
       alt: el.getAttribute("alt"),
@@ -90,28 +90,94 @@ test("photos grid shape and image attributes (AC-7) [not-catalog]", async ({
     expect(a.srcset).toContain(".webp");
     expect(a.linked).toBe(false);
   }
-  const tracks = await grid.evaluate(
-    (el) => getComputedStyle(el).gridTemplateColumns.trim().split(/\s+/).length,
-  );
-  expect(tracks).toBe(testInfo.project.name === "mobile" ? 2 : 3);
+  const shape = await grid.evaluate((el) => {
+    const cs = getComputedStyle(el);
+    const cells = Array.from(el.children).map((li) =>
+      li.getBoundingClientRect(),
+    );
+    const unit = Math.min(...cells.map((c) => c.height));
+    return {
+      columns: cs.gridTemplateColumns.trim().split(/\s+/).length,
+      rows: cs.gridTemplateRows.trim().split(/\s+/).length,
+      // frames taller than one row: the two hand shots spanning two rows
+      tall: cells.filter((c) => c.height > unit * 1.5).length,
+      widths: new Set(cells.map((c) => Math.round(c.width))).size,
+      bleed: Math.round(el.getBoundingClientRect().width),
+      viewport: window.innerWidth,
+    };
+  });
+  const mobile = testInfo.project.name === "mobile";
+  expect(shape.columns).toBe(mobile ? 2 : 3);
+  expect(shape.rows).toBe(mobile ? 5 : 3);
+  expect(shape.tall).toBe(2);
+  // a mosaic, not a uniform grid: on phones one frame also runs two columns
+  expect(shape.widths).toBe(mobile ? 2 : 1);
+  // full-bleed: the mosaic runs to the viewport edge
+  expect(shape.bleed).toBe(shape.viewport);
 });
 
-test("consecutive primary pills sit ≥1 viewport apart (AC-6) [one-cta]", async ({
+/*
+ * [one-cta] the rule is what the reader sees, not a fixed distance: no two
+ * join pills may share a screen. Panels are sized from the large viewport so
+ * a collapsing mobile URL bar cannot pull two of them together.
+ */
+test("no two join pills can share a screen (AC-6) [one-cta]", async ({
   page,
 }) => {
-  const tops = await page
+  const pills = await page
     .locator("a.btn--primary")
     .evaluateAll((els) =>
-      els.map((el) => el.getBoundingClientRect().top + window.scrollY),
+      els.map((el) => {
+        const r = el.getBoundingClientRect();
+        return { top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
+      }),
     );
   // hero, Offer, Visit — the three and only primary pills on the page
-  expect(tops.length).toBe(3);
+  expect(pills.length).toBe(3);
   const vh = await page.evaluate(() => window.innerHeight);
-  for (let i = 1; i < tops.length; i++) {
+  for (let i = 1; i < pills.length; i++) {
     expect(
-      tops[i] - tops[i - 1],
+      pills[i].top - pills[i - 1].bottom,
       `pill ${i} vs ${i - 1}`,
     ).toBeGreaterThanOrEqual(vh);
+  }
+});
+
+/*
+ * Every panel below the hero is roughly half photograph at =900px — the one
+ * idea this redesign applies everywhere. Below 900px the panels stack, photo
+ * over text, and the photo still runs edge to edge.
+ */
+test("each split panel is half photograph and alternates sides", async ({
+  page,
+}, testInfo) => {
+  const panels = await page.locator(".panel").evaluateAll((els) =>
+    els.map((el) => {
+      const photo = el.querySelector(".panel__photo");
+      if (!photo) throw new Error("panel has no photograph");
+      const p = photo.getBoundingClientRect();
+      const s = el.getBoundingClientRect();
+      return {
+        widthShare: p.width / s.width,
+        heightShare: p.height / s.height,
+        photoStart: Math.round(p.left) === Math.round(s.left),
+      };
+    }),
+  );
+  // Offer, Story, Visit
+  expect(panels.length).toBe(3);
+  for (const panel of panels) {
+    if (testInfo.project.name === "mobile") {
+      expect(panel.widthShare).toBeCloseTo(1, 1);
+    } else {
+      expect(panel.widthShare).toBeCloseTo(0.5, 1);
+      expect(panel.heightShare).toBeCloseTo(1, 1);
+    }
+  }
+  if (testInfo.project.name !== "mobile") {
+    // the photograph swaps sides from panel to panel
+    expect(panels[0].photoStart).not.toBe(panels[1].photoStart);
+    expect(panels[1].photoStart).not.toBe(panels[2].photoStart);
   }
 });
 
@@ -156,6 +222,7 @@ test("image transfer for the whole page is ≤ 1 MB (AC-8)", async ({
   await page.waitForLoadState("networkidle");
   await context.close();
   const bytes = Array.from(sizes.values()).reduce((a, b) => a + b, 0);
-  expect(sizes.size).toBe(10);
+  // hero + four panel photos + three step crops + seven mosaic frames
+  expect(sizes.size).toBe(14);
   expect(bytes).toBeLessThanOrEqual(1_000_000);
 });

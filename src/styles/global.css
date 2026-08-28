@@ -240,6 +240,8 @@ a {
  * `display: none` — it must stay in the accessibility tree.
  */
 .sr-only {
+  /* no visual role, so no display size either ([story-owns-38-54]) */
+  font: inherit;
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
