@@ -297,8 +297,9 @@ site, TikTok bio pointing at the site.
    layout work; nobody edits the site on a schedule.
 
 ## 11. Risks & open questions
-- **Group not yet created** at build time — mitigated by the join fallback
-  (§3.2); `GROUP_INVITE_URL` is filled by a one-line change when it exists.
+- **Group invite link revoked or reset** — the group exists (created
+  2026-10-14) and `GROUP_INVITE_URL` is set; the join fallback (§3.2) stays as
+  the safety net — emptying the constant is a one-line change.
 - **Sole-operator risk** — the growth plan leans on the owner's per-stock-drop
   routine; the site adds zero to her workload by construction.
 - **Content-channel variance** — the site does not depend on social success
