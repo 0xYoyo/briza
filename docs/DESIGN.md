@@ -429,7 +429,8 @@ CSS transitions plus one IntersectionObserver ([motion-on-entry]).
 - **Reviews band.** One inverse row: the heading at the inline-start, two
   review pills at the inline-end, stacked below 900px.
 - **Footer.** Navy, ice text, one compact row at ≥900px — name in
-  `--font-display` at `--text-h3`, address, phone, then the social row
+  `--font-display` at `--text-h3`, address, two labeled phones (store
+  landline, Irit's mobile), then the social row
   pushed to the inline-end — stacked below 900px. Social icons are the only
   icons in the footer.
 

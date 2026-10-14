@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { TIKTOK_URL } from "../src/constants";
+import { callHref, landlineHref } from "../src/links";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -179,6 +180,28 @@ test("footer has exactly one social link, TikTok", async ({ page }) => {
   await expect(social).toHaveCount(1);
   await expect(social).toHaveAttribute("href", TIKTOK_URL);
   await expect(social).toHaveAttribute("rel", "noopener");
+});
+
+test("footer shows the store landline and Irit's mobile, labeled [rtl-numerals] [tap-56]", async ({
+  page,
+}) => {
+  const phones = page.locator("footer a.footer__phone");
+  await expect(phones).toHaveCount(2);
+  const expected = [
+    { label: "חנות:", number: "03-5279187", href: landlineHref() },
+    { label: "אירית:", number: "052-4381666", href: callHref() },
+  ];
+  for (const [i, { label, number, href }] of expected.entries()) {
+    const phone = phones.nth(i);
+    await expect(phone).toHaveAttribute("href", href);
+    await expect(phone).not.toHaveAttribute("target", /.*/);
+    await expect(phone.locator(".footer__label")).toHaveText(label);
+    await expect(phone.locator("bdi")).toHaveText(number);
+    // [hebrew-only] no Latin visible text
+    expect(await phone.innerText()).not.toMatch(/[A-Za-z]/);
+    const box = await phone.boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(56);
+  }
 });
 
 test("every image declares width and height [no-layout-shift]", async ({

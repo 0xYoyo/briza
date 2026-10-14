@@ -9,6 +9,7 @@ import {
   callHref,
   JOIN_FALLBACK_MESSAGE,
   joinHref,
+  landlineHref,
   WRITE_MESSAGE,
   writeHref,
 } from "../src/links";
@@ -31,14 +32,18 @@ test("every link on the page is one of the known actions (AC-5) [no-dead-button]
 
   const hrefs = links.map((l) => l.href);
   const count = (h: string) => hrefs.filter((x) => x === h).length;
-  expect(count(joinHref())).toBe(3);
-  expect(count(writeHref())).toBe(2);
-  expect(count(callHref())).toBe(3);
+  // join: hero, Offer · write: how-it-works, sticky bar, Visit
+  // call (Irit): sticky icon, footer · landline (store): Visit, footer
+  expect(count(joinHref())).toBe(2);
+  expect(count(writeHref())).toBe(3);
+  expect(count(callHref())).toBe(2);
+  expect(count(landlineHref())).toBe(2);
   expect(new Set(hrefs)).toEqual(
     new Set([
       joinHref(),
       writeHref(),
       callHref(),
+      landlineHref(),
       MAPS_URL,
       GBP_REVIEWS_URL,
       GBP_WRITE_REVIEW_URL,
@@ -57,6 +62,15 @@ test("every link on the page is one of the known actions (AC-5) [no-dead-button]
     } else if (/^https?:/.test(link.href)) {
       expect(link.target, link.href).toBe("_blank");
       expect(link.rel ?? "", link.href).toContain("noopener");
+    } else {
+      // wa.me chats and tel: links stay same-tab
+      expect(link.target, link.href).toBeNull();
     }
+  }
+  // the join pills open the group invite in a new tab (AC-2)
+  const joins = links.filter((l) => l.href === joinHref());
+  for (const join of joins) {
+    expect(join.target).toBe("_blank");
+    expect(join.rel ?? "").toContain("noopener");
   }
 });

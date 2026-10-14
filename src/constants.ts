@@ -7,8 +7,10 @@ export const SITE_URL = "https://briza-tlv.com";
 export const WHATSAPP_NUMBER = "972524381666";
 /** Same number, as displayed on the page. */
 export const PHONE_DISPLAY = "052-4381666";
-/** Store landline in E.164 digits — JSON-LD only, never rendered (PRD §3.4). */
+/** Store landline in E.164 digits — the "call the store" number (PRD §3.2). */
 export const LANDLINE_NUMBER = "97235279187";
+/** Same number, as displayed in the footer. */
+export const LANDLINE_DISPLAY = "03-5279187";
 
 /** Gan Ha'Ir mall, Ibn Gabirol 71 — building-level accuracy, chosen 2026-08-27. */
 export const GEO = { latitude: 32.0866, longitude: 34.7815 } as const;
@@ -24,10 +26,12 @@ export const META_DESCRIPTION =
   "בריזה — חנות בגדי נשים בקניון גן העיר, תל אביב. בגדים מיובאים, נבחרים ביד, במידות 38–54, ממחיר ₪79. הצטרפו לקבוצת העדכונים בוואטסאפ ל־10% הנחה על הקנייה הראשונה.";
 
 /**
- * WhatsApp group invite link. Empty until the group exists — while empty the
- * join button falls back to a chat with the owner (PRD §3.2).
+ * WhatsApp group invite link. The group exists (created 2026-10-14); setting
+ * this back to "" restores the join fallback — a chat with the owner asking to
+ * be added (PRD §3.2).
  */
-export const GROUP_INVITE_URL = "";
+export const GROUP_INVITE_URL =
+  "https://chat.whatsapp.com/KV11Lo7BA3pAEgCCdNgDu2";
 
 export const GBP_WRITE_REVIEW_URL = "https://g.page/r/CdIzewCEJR_XEBM/review";
 export const MAPS_URL = "https://share.google/z2mgH77LVrraBBrqF";

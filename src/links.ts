@@ -1,4 +1,8 @@
-import { GROUP_INVITE_URL, WHATSAPP_NUMBER } from "./constants";
+import {
+  GROUP_INVITE_URL,
+  LANDLINE_NUMBER,
+  WHATSAPP_NUMBER,
+} from "./constants";
 
 /** Prefilled WhatsApp messages, customer → owner (PRD §3.5). */
 export const WRITE_MESSAGE =
@@ -18,6 +22,11 @@ export function writeHref(): string {
 /** Click-to-call the owner's number (PRD §3.2). */
 export function callHref(): string {
   return `tel:+${WHATSAPP_NUMBER}`;
+}
+
+/** Click-to-call the store landline (PRD §3.2). */
+export function landlineHref(): string {
+  return `tel:+${LANDLINE_NUMBER}`;
 }
 
 /**

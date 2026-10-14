@@ -2,11 +2,12 @@
 import {
   FACEBOOK_URL,
   INSTAGRAM_URL,
+  LANDLINE_DISPLAY,
   PHONE_DISPLAY,
   STORE_NAME,
   TIKTOK_URL,
 } from "../constants";
-import { callHref } from "../links";
+import { callHref, landlineHref } from "../links";
 import Address from "./Address.astro";
 
 type Social = { href: string; label: string; path: string };
@@ -40,8 +41,13 @@ const socials: Social[] = (
     <span class="footer__dot" aria-hidden="true">·</span>
     <p class="footer__meta"><Address /></p>
     <span class="footer__dot" aria-hidden="true">·</span>
-    <p class="footer__meta">
-      <a class="footer__phone" href={callHref()}><bdi>{PHONE_DISPLAY}</bdi></a>
+    <p class="footer__meta footer__phones">
+      <a class="footer__phone" href={landlineHref()}>
+        <span class="footer__label">חנות:</span> <bdi>{LANDLINE_DISPLAY}</bdi>
+      </a>
+      <a class="footer__phone" href={callHref()}>
+        <span class="footer__label">אירית:</span> <bdi>{PHONE_DISPLAY}</bdi>
+      </a>
     </p>
     {
       socials.length > 0 && (
@@ -64,7 +70,7 @@ const socials: Social[] = (
 <style>
   /*
    * Navy bookend (DESIGN §2.1); [hebrew-only] no Latin visible text.
-   * One compact row at =900px — name, address, phone, socials — and a stack
+   * One compact row at =900px — name, address, phones, socials — and a stack
    * below it. The dots are decorative and hidden from assistive tech.
    */
   .footer {
@@ -101,9 +107,26 @@ const socials: Social[] = (
     color: var(--text-on-inverse-muted);
   }
 
-  /* [rtl-numerals] the phone is an isolated LTR run via <bdi> */
+  .footer__phones {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--space-4);
+  }
+
+  /*
+   * Store landline and Irit's mobile, each labeled. [rtl-numerals] each number
+   * is an isolated LTR run via <bdi>; [tap-56] 56px tall hit area.
+   */
   .footer__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--tap-min);
     color: var(--text-on-inverse);
+  }
+
+  .footer__label {
+    color: var(--text-on-inverse-muted);
   }
 
   .footer__social {
