@@ -28,24 +28,25 @@ describe("links", () => {
     expect(callHref()).toBe("tel:+972524381666");
   });
 
-  it("joinHref falls back to a chat asking to join while the invite URL is empty", () => {
-    expect(GROUP_INVITE_URL).toBe("");
-    expect(decodedText(joinHref())).toBe(JOIN_FALLBACK_MESSAGE);
+  it("joinHref returns the group invite link now that the group exists", () => {
+    expect(GROUP_INVITE_URL).toBe(
+      "https://chat.whatsapp.com/KV11Lo7BA3pAEgCCdNgDu2",
+    );
+    expect(joinHref()).toBe(GROUP_INVITE_URL);
+  });
+
+  it("joinHref falls back to a chat asking to join when the invite URL is empty", () => {
     expect(decodedText(joinHref(""))).toBe(JOIN_FALLBACK_MESSAGE);
     expect(JOIN_FALLBACK_MESSAGE).toBe(
       "שלום אירית, אשמח להצטרף לקבוצת העדכונים של בריזה.",
     );
   });
 
-  it("joinHref returns the invite URL when it is set", () => {
-    const invite = "https://chat.whatsapp.com/EXAMPLEinvite";
-    expect(joinHref(invite)).toBe(invite);
-  });
-
   // [no-dead-button]
   it("never returns an empty, '#', or undefined href", () => {
     const hrefs = [
       joinHref(),
+      joinHref(""),
       joinHref("https://example.invalid/x"),
       writeHref(),
       callHref(),

@@ -25,13 +25,23 @@ const {
   target,
   rel,
 } = Astro.props;
+
+/**
+ * External destinations other than a wa.me chat open in a new tab by
+ * default (the rule e2e/links.spec.ts enforces). Covers the join button in
+ * both of its states: group invite link (external) and wa.me fallback
+ * (same-tab), with no change needed at the call sites (PRD §3.2).
+ */
+const external = /^https?:\/\//.test(href) && !href.startsWith("https://wa.me/");
+const targetAttr = target ?? (external ? "_blank" : undefined);
+const relAttr = rel ?? (external ? "noopener" : undefined);
 ---
 
 <a
   class:list={["btn", `btn--${kind}`, { "btn--inverse": inverse }]}
   href={href}
-  target={target}
-  rel={rel}
+  target={targetAttr}
+  rel={relAttr}
 >
   {
     icon === "whatsapp" && (

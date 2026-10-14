@@ -24,10 +24,10 @@ export const META_DESCRIPTION =
   "בריזה — חנות בגדי נשים בקניון גן העיר, תל אביב. בגדים מיובאים, נבחרים ביד, במידות 38–54, ממחיר ₪79. הצטרפו לקבוצת העדכונים בוואטסאפ ל־10% הנחה על הקנייה הראשונה.";
 
 /**
- * WhatsApp group invite link. Empty until the group exists — while empty the
- * join button falls back to a chat with the owner (PRD §3.2).
+ * WhatsApp group invite link (group created 2026-10-14). If this is ever
+ * emptied, the join button falls back to a chat with the owner (PRD §3.2).
  */
-export const GROUP_INVITE_URL = "";
+export const GROUP_INVITE_URL = "https://chat.whatsapp.com/KV11Lo7BA3pAEgCCdNgDu2";
 
 export const GBP_WRITE_REVIEW_URL = "https://g.page/r/CdIzewCEJR_XEBM/review";
 export const MAPS_URL = "https://share.google/z2mgH77LVrraBBrqF";
