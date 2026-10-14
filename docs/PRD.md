@@ -62,14 +62,16 @@ retail business; no app logic beyond one computed open/closed line.
    "new" or "this week".
 6. **Visit** — a split panel beside the shopfront seen from the mall
    corridor: address, opening hours table, computed open/closed line (§3.3),
-   map link + navigate button, click-to-call, and the primary join button
-   once more.
+   and three secondary actions: navigate (map link), call the store
+   (landline), and write to Irit (WhatsApp chat). The primary join button
+   lives in the Hero and Offer only.
 7. **Google reviews** — a short inverse band: one line and two pale pill
    links, read reviews on Google and write a review. No quotes reproduced on
    the page; the links are the social proof.
-8. **Footer** — one compact row: name, address, phone, social links
-   (configurable, each individually hideable; only TikTok is expected at
-   launch).
+8. **Footer** — one compact row: name, address, two labeled phones (store
+   landline `חנות:` and Irit's mobile `אירית:`, both click-to-call), social
+   links (configurable, each individually hideable; only TikTok is expected
+   at launch).
 
 A sticky bottom bar on mobile carries the secondary "write to Irit" WhatsApp
 action and a call icon; the primary join action lives in the sections, not
@@ -81,8 +83,11 @@ the bar, so the page has exactly one loud CTA at a time.
   prefilled Hebrew message asking to be added to the updates group. The site
   never shows a dead or empty button.
 - **Write to Irit:** `wa.me/972524381666` with a prefilled Hebrew greeting.
-- **Call:** `tel:` link to the owner's number 052-4381666 (the number she
-  answers). The landline 03-5279187 appears in JSON-LD only.
+- **Call:** calling is for the store, WhatsApp is for Irit (founder decision
+  2026-10-14). Visit's call button dials the store landline 03-5279187;
+  052-4381666 stays the owner's WhatsApp number, also click-to-call from the
+  sticky bar's call icon. The footer shows both numbers, labeled, each a
+  `tel:` link.
 - **Navigate:** Google Maps link to the store (`MAPS_URL`).
 - **Reviews:** `GBP_REVIEWS_URL` (read) and `GBP_WRITE_REVIEW_URL` (write).
 - **Socials:** `TIKTOK_URL`, `INSTAGRAM_URL`, `FACEBOOK_URL` — each rendered
@@ -110,7 +115,8 @@ Source: founder (F) or founder-confirmed on 2026-08-26 (F26).
 - Hours: Sun–Thu 9:30–19:00, Fri 9:30–14:00, Sat closed. (F)
 - Owner's WhatsApp 052-4381666; she answers it herself during store hours.
   (F26)
-- Store landline 03-5279187 (JSON-LD/GBP only). (F)
+- Store landline 03-5279187 — rendered in the footer, dialed by Visit's call
+  button, and in JSON-LD/GBP (founder decision 2026-10-14). (F)
 - 10% discount on the first purchase for WhatsApp-group members, verified
   by showing the group at the register. (F26)
 - Fitting help in store. NOT tailoring — never say התאמה/תיקונים. (F)
@@ -152,7 +158,7 @@ emoji on the site.
 - Heading: `גן העיר, קומת כניסה`
 - Address line: `אבן גבירול 71, קניון גן העיר, תל אביב`
 - Hours rows: `ראשון–חמישי 9:30–19:00` · `שישי 9:30–14:00` · `שבת סגור`
-- Buttons: `נווטו לחנות` · `התקשרו` · `הצטרפו לקבוצת העדכונים`
+- Buttons: `נווטו לחנות` · `התקשרו` · `כתבו לאירית`
 
 **Reviews**
 - Heading: `מה אומרות עלינו`

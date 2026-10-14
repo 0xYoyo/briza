@@ -4,6 +4,7 @@ import {
   GBP_WRITE_REVIEW_URL,
   MAPS_URL,
 } from "../src/constants";
+import { landlineHref, writeHref } from "../src/links";
 
 const STATUS =
   /^(פתוח עכשיו · אירית עונה בוואטסאפ|סגור עכשיו · נפתח (היום|מחר|ביום (ראשון|שני|שלישי|רביעי|חמישי|שישי)) ב־\d{1,2}:\d{2})$/;
@@ -59,17 +60,25 @@ test.describe("Visit", () => {
     }
   });
 
-  test("navigate, call and join actions (AC-7)", async ({ page }) => {
+  test("navigate, call the store and write to Irit (AC-7)", async ({
+    page,
+  }) => {
     const navigate = page.getByRole("link", { name: "נווטו לחנות" });
     await expect(navigate).toHaveAttribute("href", MAPS_URL);
     await expect(navigate).toHaveAttribute("target", "_blank");
     await expect(navigate).toHaveAttribute("rel", "noopener");
-    await expect(
-      page.getByRole("link", { name: "התקשרו", exact: true }),
-    ).toHaveAttribute("href", "tel:+972524381666");
-    const primaries = page.locator("a.btn--primary");
-    await expect(primaries).toHaveCount(3);
-    await expect(primaries.last()).toHaveText("הצטרפו לקבוצת העדכונים");
+    const actions = page.locator(".visit__actions");
+    await expect(actions.locator("a")).toHaveCount(3);
+    const call = actions.getByRole("link", { name: "התקשרו", exact: true });
+    await expect(call).toHaveAttribute("href", landlineHref());
+    await expect(call).toHaveAttribute("href", "tel:+97235279187");
+    const write = actions.getByRole("link", { name: "כתבו לאירית" });
+    await expect(write).toHaveAttribute("href", writeHref());
+    await expect(write).toHaveClass(/btn--secondary/);
+    await expect(write.locator("svg")).toHaveCount(1);
+    // the join pills live in the hero and Offer only
+    await expect(actions.locator(".btn--primary")).toHaveCount(0);
+    await expect(page.locator("a.btn--primary")).toHaveCount(2);
   });
 
   test("review links point at Google (AC-7) [no-testimonial]", async ({

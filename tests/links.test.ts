@@ -4,6 +4,7 @@ import {
   callHref,
   JOIN_FALLBACK_MESSAGE,
   joinHref,
+  landlineHref,
   WRITE_MESSAGE,
   writeHref,
 } from "../src/links";
@@ -28,9 +29,18 @@ describe("links", () => {
     expect(callHref()).toBe("tel:+972524381666");
   });
 
-  it("joinHref falls back to a chat asking to join while the invite URL is empty", () => {
-    expect(GROUP_INVITE_URL).toBe("");
-    expect(decodedText(joinHref())).toBe(JOIN_FALLBACK_MESSAGE);
+  it("landlineHref is a tel: link to the store landline", () => {
+    expect(landlineHref()).toBe("tel:+97235279187");
+  });
+
+  it("joinHref opens the real group invite link", () => {
+    expect(GROUP_INVITE_URL).toBe(
+      "https://chat.whatsapp.com/KV11Lo7BA3pAEgCCdNgDu2",
+    );
+    expect(joinHref()).toBe(GROUP_INVITE_URL);
+  });
+
+  it("joinHref falls back to a chat asking to join when the invite URL is empty", () => {
     expect(decodedText(joinHref(""))).toBe(JOIN_FALLBACK_MESSAGE);
     expect(JOIN_FALLBACK_MESSAGE).toBe(
       "שלום אירית, אשמח להצטרף לקבוצת העדכונים של בריזה.",
@@ -46,9 +56,11 @@ describe("links", () => {
   it("never returns an empty, '#', or undefined href", () => {
     const hrefs = [
       joinHref(),
+      joinHref(""),
       joinHref("https://example.invalid/x"),
       writeHref(),
       callHref(),
+      landlineHref(),
     ];
     for (const href of hrefs) {
       expect(href).toBeDefined();

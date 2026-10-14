@@ -97,8 +97,6 @@ test("JSON-LD is a ClothingStore with hours and geo (AC-6)", async ({
   expect(data.geo.latitude).toBe(32.0866);
   expect(data.telephone).toEqual(["+972524381666", "+97235279187"]);
   expect(data.sameAs).toEqual(["https://www.tiktok.com/@irit027"]);
-  // the landline is JSON-LD only, never visible (PRD §3.4)
-  await expect(page.locator("body")).not.toContainText("03-5279187");
 });
 
 test("every image has Hebrew alt text (AC-6) [hebrew-only]", async ({

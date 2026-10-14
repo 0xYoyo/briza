@@ -138,8 +138,8 @@ test("no two join pills can share a screen (AC-6) [one-cta]", async ({
       return { top: r.top + window.scrollY, bottom: r.bottom + window.scrollY };
     }),
   );
-  // hero, Offer, Visit — the three and only primary pills on the page
-  expect(pills.length).toBe(3);
+  // hero and Offer — the two and only primary pills on the page
+  expect(pills.length).toBe(2);
   const vh = await page.evaluate(() => window.innerHeight);
   for (let i = 1; i < pills.length; i++) {
     expect(

@@ -1,7 +1,7 @@
 ---
 import { HOURS, MAPS_URL } from "../constants";
 import { hoursRows } from "../hours";
-import { callHref, joinHref } from "../links";
+import { landlineHref, writeHref } from "../links";
 import { VISIT_PHOTO } from "../photos";
 import Address from "./Address.astro";
 import Button from "./Button.astro";
@@ -38,8 +38,8 @@ const rows = hoursRows(HOURS);
   </div>
   <div class="visit__actions">
     <Button kind="secondary" href={MAPS_URL} target="_blank" rel="noopener">נווטו לחנות</Button>
-    <Button kind="secondary" href={callHref()} icon="phone">התקשרו</Button>
-    <Button kind="primary" href={joinHref()} icon="whatsapp">הצטרפו לקבוצת העדכונים</Button>
+    <Button kind="secondary" href={landlineHref()} icon="phone">התקשרו</Button>
+    <Button kind="secondary" href={writeHref()} icon="whatsapp">כתבו לאירית</Button>
   </div>
 </Split>
 
@@ -120,9 +120,8 @@ const rows = hoursRows(HOURS);
 
   @media (min-width: 600px) {
     /*
-     * The three actions sit on one line where they fit and wrap the join pill
-     * onto its own line where they do not — it is never crowded by a second
-     * action of the same weight.
+     * The three actions — navigate, call the store, write to Irit — sit on
+     * one line where they fit and wrap where they do not.
      */
     .visit__actions {
       flex-direction: row;
